@@ -1,0 +1,6 @@
+INFO Service running
+INFO CPU usage normal
+ERROR CPU_HIGH detected
+ERROR CPU_HIGH detected
+ERROR CPU_HIGH detected
+

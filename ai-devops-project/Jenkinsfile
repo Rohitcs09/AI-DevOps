@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven3'   // Jenkins me configure hona chahiye
+    }
+
+    stages {
+
+        stage('Clone Code') {
+            steps {
+                git 'https://github.com/Rohitcs09/AI-DevOps.git'
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                sh 'cd ai-devops-maven && mvn clean install | tee build.log'
+            }
+        }
+
+        stage('Run AI Agent') {
+            steps {
+                sh 'python3 ai_agent.py'
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo '❌ Build Failed - AI Analysis Triggered'
+        }
+        success {
+            echo '✅ Build Success'
+        }
+    }
+}

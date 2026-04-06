@@ -1,0 +1,7 @@
+INFO Service started
+INFO CPU usage normal
+WARNING Memory usage high
+WARNING Memory usage high
+ERROR CPU_HIGH detected
+ERROR CPU_HIGH detected
+

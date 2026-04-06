@@ -2,26 +2,26 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'
+        maven 'Maven3'   // Jenkins me configure hona chahiye
     }
 
     stages {
 
         stage('Clone Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/Rohitcs09/AI-DevOps.git'
+                git 'https://github.com/Rohitcs09/AI-DevOps.git'
             }
         }
 
         stage('Build with Maven') {
             steps {
-                sh 'cd ai-devops-project/ai-devops-maven && mvn clean install | tee build.log'
+                sh 'cd ai-devops-maven && mvn clean install | tee build.log'
             }
         }
 
         stage('Run AI Agent') {
             steps {
-                sh 'cd ai-devops-project && python3 ai_agent.py'
+                sh 'python3 ai_agent.py'
             }
         }
     }

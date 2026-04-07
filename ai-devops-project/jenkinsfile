@@ -13,34 +13,41 @@ pipeline {
             }
         }
 
-stage('Build with Maven') {
-    steps {
-        sh '''
-        cd ai-devops-project/ai-devops-maven
-
-        echo "Running Maven Build..."
-
-        # Force log creation
-        mvn clean install > build.log 2>&1 || true
-
-        echo "===== BUILD LOG ====="
-        cat build.log
-
-        echo "===== CHECKING FAILURE ====="
-
-        if grep -q "BUILD FAILURE" build.log; then
-            echo "Build Failed ❌"
-            exit 1
-        else
-            echo "Build Success ✅"
-        fi
-        '''
-    }
-}
-
-stage('Run AI Agent') {
+        stage('Build with Maven') {
             steps {
-                sh 'cd ai-devops-project && python3 ai_agent.py'
+                sh '''
+                cd ai-devops-project/ai-devops-maven
+
+                echo "Running Maven Build..."
+
+                mvn clean install > build.log 2>&1 || true
+
+                echo "===== BUILD LOG ====="
+                cat build.log
+
+                echo "===== CHECKING FAILURE ====="
+
+                if grep -q "BUILD FAILURE" build.log; then
+                    echo "Build Failed ❌"
+                    exit 1
+                else
+                    echo "Build Success ✅"
+                fi
+                '''
+            }
+        }
+
+        stage('Run AI Agent') {
+            steps {
+                sh '''
+                echo "Installing Python..."
+                apt-get update -y
+                apt-get install -y python3 python3-pip
+
+                echo "Running AI Agent..."
+                cd ai-devops-project
+                python3 ai_agent.py
+                '''
             }
         }
     }
@@ -53,17 +60,4 @@ stage('Run AI Agent') {
             echo '✅ Build Success'
         }
     }
-
-   stage('Run AI Agent') {
-    steps {
-        sh '''
-        echo "Installing Python..."
-        apt-get update -y
-        apt-get install -y python3 python3-pip
-
-        echo "Running AI Agent..."
-        cd ai-devops-project
-        python3 ai_agent.py
-        '''
-    }
-}}
+}

@@ -13,13 +13,32 @@ pipeline {
             }
         }
 
-        stage('Build with Maven') {
-            steps {
-                sh 'cd ai-devops-project/ai-devops-maven && mvn clean install | tee build.log'
-            }
-        }
+stage('Build with Maven') {
+    steps {
+        sh '''
+        cd ai-devops-project/ai-devops-maven
 
-        stage('Run AI Agent') {
+        echo "Running Maven Build..."
+
+        # Force log creation
+        mvn clean install > build.log 2>&1 || true
+
+        echo "===== BUILD LOG ====="
+        cat build.log
+
+        echo "===== CHECKING FAILURE ====="
+
+        if grep -q "BUILD FAILURE" build.log; then
+            echo "Build Failed ❌"
+            exit 1
+        else
+            echo "Build Success ✅"
+        fi
+        '''
+    }
+}
+
+stage('Run AI Agent') {
             steps {
                 sh 'cd ai-devops-project && python3 ai_agent.py'
             }

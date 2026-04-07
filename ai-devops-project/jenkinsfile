@@ -28,10 +28,10 @@ pipeline {
                 echo "===== CHECKING FAILURE ====="
 
                 if grep -q "BUILD FAILURE" build.log; then
-                    echo "Build Failed ❌"
+                    echo "Build Failed"
                     exit 1
                 else
-                    echo "Build Success ✅"
+                    echo "Build Success"
                 fi
                 '''
             }
@@ -54,10 +54,10 @@ pipeline {
 
     post {
         failure {
-            echo '❌ Build Failed - AI Analysis Triggered'
+            echo ' Build Failed - AI Analysis Triggered'
         }
         success {
-            echo '✅ Build Success'
+            echo 'Build Success'
         }
     }
 }

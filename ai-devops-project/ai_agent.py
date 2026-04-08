@@ -2,7 +2,7 @@ import os
 
 print("🔍 AI Agent analyzing logs...")
 
-log_path = "ai-devops-project/ai-devops-maven/build.log"
+log_path = "ai-devops-maven/build.log"
 
 if not os.path.exists(log_path):
     print("❌ Log file not found:", log_path)

@@ -13,22 +13,18 @@ pipeline {
             }
         }
 
-        stage('Build with Maven') {
+       stage('Build with Maven') {
     steps {
         sh '''
         cd ai-devops-project/ai-devops-maven
 
         echo "Running Maven Build..."
 
-        mvn clean install > build.log 2>&1
-        BUILD_STATUS=$?
-
-        echo "===== BUILD LOG ====="
-        cat build.log
+        mvn clean install | tee build.log
 
         echo "===== CHECKING FAILURE ====="
 
-        if [ $BUILD_STATUS -ne 0 ] || grep -q "BUILD FAILURE" build.log; then
+        if grep -q "BUILD FAILURE" build.log || grep -q "COMPILATION ERROR" build.log; then
             echo "Build Failed ❌"
             exit 1
         else
@@ -37,7 +33,6 @@ pipeline {
         '''
     }
 }
-
 
         // 👇 सिर्फ visibility के लिए (AI stage दिखे UI में)
         stage('AI Analysis (Info Stage)') {

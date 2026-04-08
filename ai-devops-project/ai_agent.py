@@ -1,26 +1,27 @@
 import os
 
-def read_logs():
-    try:
-        with open("build.log", "r") as f:
-            return f.read()
-    except:
-        return "No logs found"
+print("🔍 AI Agent analyzing logs...")
 
-def analyze_logs(logs):
-    print("🔍 AI Agent analyzing logs...\n")
+log_path = "ai-devops-project/ai-devops-maven/build.log"
 
-    if "BUILD FAILURE" in logs:
-        print("❌ Build Failed Detected")
-        print("💡 Suggestion: Check dependency or syntax error")
+if not os.path.exists(log_path):
+    print("❌ Log file not found:", log_path)
+    exit(0)
 
-    elif "COMPILATION ERROR" in logs:
-        print("❌ Compilation Error")
-        print("💡 Suggestion: Fix Java syntax or missing imports")
+with open(log_path, "r") as f:
+    logs = f.read()
 
-    else:
-        print("✅ Build looks fine")
+if "COMPILATION ERROR" in logs or "BUILD FAILURE" in logs:
+    print("❌ Issue Detected by AI")
 
-if __name__ == "__main__":
-    logs = read_logs()
-    analyze_logs(logs)
+    for line in logs.splitlines():
+        if "error" in line.lower():
+            print("👉", line)
+            break
+
+    print("💡 Suggested Fix:")
+    print("- Fix syntax error in Java file")
+    print("- Check missing semicolon or invalid statement")
+
+else:
+    print("✅ Build looks fine")

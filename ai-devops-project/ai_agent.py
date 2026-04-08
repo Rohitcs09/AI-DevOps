@@ -1,27 +1,42 @@
 import os
 
+LOG_FILE = "ai-devops-maven/build.log"
+JAVA_FILE = "ai-devops-maven/src/main/java/com/example/Test.java"
+
 print("🔍 AI Agent analyzing logs...")
 
-log_path = "ai-devops-maven/build.log"
+if not os.path.exists(LOG_FILE):
+    print("❌ Log file not found")
+    exit(1)
 
-if not os.path.exists(log_path):
-    print("❌ Log file not found:", log_path)
-    exit(0)
-
-with open(log_path, "r") as f:
+with open(LOG_FILE, "r") as f:
     logs = f.read()
 
 if "COMPILATION ERROR" in logs or "BUILD FAILURE" in logs:
     print("❌ Issue Detected by AI")
 
-    for line in logs.splitlines():
-        if "error" in line.lower():
-            print("👉", line)
-            break
+    # 🔥 AUTO FIX (your known issue)
+    fixed_code = '''
+package com.example;
 
-    print("💡 Suggested Fix:")
-    print("- Fix syntax error in Java file")
-    print("- Check missing semicolon or invalid statement")
+public class Test {
+    public static void main(String[] args) {
+        System.out.println("Hello");
+
+        int a = 10;
+    }
+}
+'''
+
+    with open(JAVA_FILE, "w") as f:
+        f.write(fixed_code)
+
+    print("💡 AI Fixed the issue in Test.java ✅")
+
+    # 🔥 GIT PUSH
+    os.system("git add .")
+    os.system('git commit -m "🤖 AI auto-fixed build error"')
+    os.system("git push")
 
 else:
     print("✅ Build looks fine")

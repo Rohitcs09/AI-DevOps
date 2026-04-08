@@ -37,40 +37,39 @@ pipeline {
             }
         }
 
-        // Stage of AI Agent
-        stage('RUN AI Agent (AI Analyses Info Stage)') {
+        stage('RUN AI Agent (Info Stage)') {
             steps {
                 echo "AI Agent will run automatically if build fails"
             }
         }
-    
+    }
 
     post {
-    failure {
-        echo 'Build Failed - AI Analysis Triggered'
+        failure {
+            echo 'Build Failed - AI Analysis Triggered'
 
-        sh '''
-        echo "Running AI Agent..."
-        cd ai-devops-project
-        python3 ai_agent.py
+            sh '''
+            echo "Running AI Agent..."
+            cd ai-devops-project
+            python3 ai_agent.py
 
-        echo "Configuring Git..."
-        git config user.email "jenkins@ai.com"
-        git config user.name "Jenkins AI Bot"
+            echo "Configuring Git..."
+            git config user.email "jenkins@ai.com"
+            git config user.name "Jenkins AI Bot"
 
-        echo "Adding changes..."
-        git add .
+            echo "Adding changes..."
+            git add .
 
-        echo "Committing fix..."
-        git commit -m "AI auto-fix commit" || echo "Nothing to commit"
+            echo "Committing fix..."
+            git commit -m "AI auto-fix commit" || echo "Nothing to commit"
 
-        echo "Pushing changes..."
-        git push --set-upstream origin main
-        '''
+            echo "Pushing changes..."
+            git push --set-upstream origin main
+            '''
+        }
+
+        success {
+            echo 'Build Success - No AI Analysis Needed'
+        }
     }
-
-    success {
-        echo 'Build Success - No AI Analysis Needed'
-    }
-}
 }

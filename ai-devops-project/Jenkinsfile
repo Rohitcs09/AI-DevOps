@@ -28,36 +28,36 @@ pipeline {
                 echo "===== CHECKING FAILURE ====="
 
                 if grep -q "BUILD FAILURE" build.log; then
-                    echo "Build Failed ❌"
+                    echo "Build Failed"
                     exit 1
                 else
-                    echo "Build Success ✅"
+                    echo "Build Success"
                 fi
                 '''
             }
         }
 
-        // 👇 सिर्फ visibility के लिए (AI stage दिखे UI में)
-        stage('AI Analysis (Info Stage)') {
+        // Stage of AI Agent
+        stage('RUN AI Agent (AI Analyses Info Stage)') {
             steps {
-                echo "🤖 AI Agent will run automatically if build fails"
+                echo "AI Agent will run automatically if build fails"
             }
         }
     }
 
     post {
         failure {
-            echo '❌ Build Failed - AI Analysis Triggered'
+            echo 'Build Failed - AI Analysis Triggered'
 
             sh '''
-            echo "🤖 Running AI Agent..."
+            echo "Running AI Agent..."
             cd ai-devops-project
             python3 ai_agent.py
             '''
         }
 
         success {
-            echo '✅ Build Success - No AI Analysis Needed'
+            echo 'Build Success - No AI Analysis Needed'
         }
     }
 }

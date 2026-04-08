@@ -16,15 +16,15 @@ pipeline {
        stage('Build with Maven') {
     steps {
         sh '''
-        set -o pipefail   # 🔥 MOST IMPORTANT
+        bash -c "
+        set -o pipefail
 
         cd ai-devops-project/ai-devops-maven
 
-        echo "Running Maven Build..."
+        echo 'Running Maven Build...'
 
         mvn clean install | tee build.log
-
-        echo "Build completed"
+        "
         '''
     }
 }

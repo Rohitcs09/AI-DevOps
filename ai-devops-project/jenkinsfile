@@ -16,15 +16,22 @@ pipeline {
        stage('Build with Maven') {
     steps {
         sh '''
-        bash -c "
-        set -o pipefail
-
         cd ai-devops-project/ai-devops-maven
 
-        echo 'Running Maven Build...'
+        echo "Running Maven Build..."
 
-        mvn clean install | tee build.log
-        "
+        mvn clean install > build.log 2>&1
+
+        BUILD_STATUS=$?
+
+        cat build.log
+
+        if [ $BUILD_STATUS -ne 0 ]; then
+            echo "❌ Build Failed"
+            exit 1
+        else
+            echo "✅ Build Success"
+        fi
         '''
     }
 }

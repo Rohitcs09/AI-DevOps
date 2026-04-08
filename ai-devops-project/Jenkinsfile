@@ -50,10 +50,6 @@ pipeline {
             echo '❌ Build Failed - AI Analysis Triggered'
 
             sh '''
-            echo "Installing Python..."
-            apt-get update -y
-            apt-get install -y python3 python3-pip
-
             echo "🤖 Running AI Agent..."
             cd ai-devops-project
             python3 ai_agent.py

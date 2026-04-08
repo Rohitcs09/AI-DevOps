@@ -20,15 +20,20 @@ pipeline {
 
         echo "Running Maven Build..."
 
+        # Run build and capture exit code
         mvn clean install | tee build.log
+        BUILD_STATUS=${PIPESTATUS[0]}
 
-        echo "===== CHECKING FAILURE ====="
+        echo "===== BUILD STATUS ====="
+        echo $BUILD_STATUS
 
-        if grep -q "BUILD FAILURE" build.log || grep -q "COMPILATION ERROR" build.log; then
+        echo "===== BUILD LOG ====="
+        cat build.log
+
+        # 🔥 FINAL FAIL LOGIC
+        if [ $BUILD_STATUS -ne 0 ]; then
             echo "Build Failed ❌"
             exit 1
-        else
-            echo "Build Success ✅"
         fi
         '''
     }

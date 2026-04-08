@@ -14,28 +14,29 @@ pipeline {
         }
 
         stage('Build with Maven') {
-            steps {
-                sh '''
-                cd ai-devops-project/ai-devops-maven
+    steps {
+        sh '''
+        cd ai-devops-project/ai-devops-maven
 
-                echo "Running Maven Build..."
+        echo "Running Maven Build..."
 
-                mvn clean install > build.log 2>&1
+        mvn clean install > build.log 2>&1
+        BUILD_STATUS=$?
 
-                echo "===== BUILD LOG ====="
-                cat build.log
+        echo "===== BUILD LOG ====="
+        cat build.log
 
-                echo "===== CHECKING FAILURE ====="
+        echo "===== CHECKING FAILURE ====="
 
-                if grep -q "BUILD FAILURE" build.log; then
-                    echo "Build Failed ❌"
-                    exit 1
-                else
-                    echo "Build Success ✅"
-                fi
-                '''
-            }
-        }
+        if [ $BUILD_STATUS -ne 0 ] || grep -q "BUILD FAILURE" build.log; then
+            echo "Build Failed ❌"
+            exit 1
+        else
+            echo "Build Success ✅"
+        fi
+        '''
+    }
+}
 
         // 👇 सिर्फ visibility के लिए (AI stage दिखे UI में)
         stage('AI Analysis (Info Stage)') {

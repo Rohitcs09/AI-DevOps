@@ -20,7 +20,7 @@ pipeline {
 
                 echo "Running Maven Build..."
 
-                mvn clean install > build.log 2>&1 || true
+                mvn clean install > build.log 2>&1
 
                 echo "===== BUILD LOG ====="
                 cat build.log
@@ -28,36 +28,40 @@ pipeline {
                 echo "===== CHECKING FAILURE ====="
 
                 if grep -q "BUILD FAILURE" build.log; then
-                    echo "Build Failed"
+                    echo "Build Failed ❌"
                     exit 1
                 else
-                    echo "Build Success"
+                    echo "Build Success ✅"
                 fi
                 '''
             }
         }
 
-        stage('Run AI Agent') {
+        // 👇 सिर्फ visibility के लिए (AI stage दिखे UI में)
+        stage('AI Analysis (Info Stage)') {
             steps {
-                sh '''
-                echo "Installing Python..."
-                apt-get update -y
-                apt-get install -y python3 python3-pip
-
-                echo "Running AI Agent..."
-                cd ai-devops-project
-                python3 ai_agent.py
-                '''
+                echo "🤖 AI Agent will run automatically if build fails"
             }
         }
     }
 
     post {
         failure {
-            echo ' Build Failed - AI Analysis Triggered'
+            echo '❌ Build Failed - AI Analysis Triggered'
+
+            sh '''
+            echo "Installing Python..."
+            apt-get update -y
+            apt-get install -y python3 python3-pip
+
+            echo "🤖 Running AI Agent..."
+            cd ai-devops-project
+            python3 ai_agent.py
+            '''
         }
+
         success {
-            echo 'Build Success'
+            echo '✅ Build Success - No AI Analysis Needed'
         }
     }
-}
+}	

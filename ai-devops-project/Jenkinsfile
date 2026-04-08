@@ -43,7 +43,7 @@ pipeline {
                 echo "AI Agent will run automatically if build fails"
             }
         }
-    }
+    
 
     post {
     failure {
@@ -72,4 +72,5 @@ pipeline {
     success {
         echo 'Build Success - No AI Analysis Needed'
     }
+}
 }

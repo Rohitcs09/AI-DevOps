@@ -20,7 +20,7 @@ pipeline {
 
                 echo "Running Maven Build..."
 
-                mvn clean install > build.log 2>&1
+                mvn clean install 2>&1 | tee build.log
 
                 echo "===== BUILD LOG ====="
                 cat build.log

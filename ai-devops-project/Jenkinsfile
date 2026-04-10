@@ -9,13 +9,18 @@ pipeline {
 
         stage('Clone Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/Rohitcs09/AI-DevOps.git'
+                git branch: 'main',
+                    credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',   // ✅ Added
+                    url: 'https://github.com/Rohitcs09/AI-DevOps.git'
             }
         }
 
         stage('Build with Maven') {
             steps {
                 sh '''
+                pwd
+                ls -la
+
                 cd ai-devops-project/ai-devops-maven
 
                 echo "Running Maven Build..."
@@ -57,6 +62,10 @@ pipeline {
             sh '''
             echo "Running AI Agent..."
             cd ai-devops-project
+
+            python3 --version || true
+            pip3 install -r requirements.txt || true
+
             python3 ai_agent.py
 
             echo "Configuring Git..."
@@ -70,7 +79,8 @@ pipeline {
             git commit -m "AI auto-fix commit" || echo "Nothing to commit"
 
             echo "Pushing changes..."
-            git push https://$GIT_USER:$GIT_PASS@github.com/Rohitcs09/AI-DevOps.git HEAD:main
+            git remote set-url origin https://$GIT_USER:$GIT_PASS@github.com/Rohitcs09/AI-DevOps.git   # ✅ safer push
+            git push origin main
             '''
         }
     }
@@ -79,3 +89,4 @@ pipeline {
         echo 'Build Success - No AI Analysis Needed'
     }
 }
+

@@ -55,44 +55,37 @@ pipeline {
 
     post {
     always {
-        echo 'Build Failed - AI Analysis Triggered'
+        script {
+            def isFailed = fileExists('ai-devops-project/ai-devops-maven/build_failed')
 
-        withCredentials([usernamePassword(
-            credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',
-            usernameVariable: 'GIT_USER',
-            passwordVariable: 'GIT_PASS'
-        )]) {
+            if (isFailed) {
+                echo 'Build Failed - AI Analysis Triggered'
 
-            sh '''
-            echo "Running AI Agent..."
-            cd ai-devops-project
+                withCredentials([usernamePassword(
+                    credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',
+                    usernameVariable: 'GIT_USER',
+                    passwordVariable: 'GIT_PASS'
+                )]) {
 
-            python3 --version || true
-            pip3 install -r requirements.txt || true
+                    sh '''
+                    cd ai-devops-project
 
-            python3 ai_agent.py
+                    python3 ai_agent.py
 
-            echo "Configuring Git..."
-            git config user.email "jenkins@ai.com"
-            git config user.name "Jenkins AI Bot"
+                    git config user.email "jenkins@ai.com"
+                    git config user.name "Jenkins AI Bot"
 
-            echo "Adding changes..."
-            git add .
+                    git add .
+                    git commit -m "AI auto-fix commit" || echo "Nothing to commit"
 
-            echo "Committing fix..."
-            git commit -m "AI auto-fix commit" || echo "Nothing to commit"
+                    git remote set-url origin https://$GIT_USER:$GIT_PASS@github.com/Rohitcs09/AI-DevOps.git
+                    git push origin main
+                    '''
+                }
 
-            echo "Pushing changes..."
-            git remote set-url origin https://$GIT_USER:$GIT_PASS@github.com/Rohitcs09/AI-DevOps.git   # ✅ safer push
-            git push origin main
-            '''
+            } else {
+                echo 'Build Success - No AI Analysis Needed'
+            }
         }
     }
-
-    success {
-        echo 'Build Success - No AI Analysis Needed'
-    }
- }
-
 }
-i

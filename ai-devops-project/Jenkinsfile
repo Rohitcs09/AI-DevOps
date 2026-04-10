@@ -21,9 +21,6 @@ pipeline {
         set +e
         set -o pipefail
 
-        pwd
-        ls -la
-
         cd ai-devops-project/ai-devops-maven || exit 1
 
         echo "Running Maven Build..."
@@ -37,12 +34,9 @@ pipeline {
         echo "===== BUILD LOG ====="
         cat build.log
 
-        echo "===== CHECKING FAILURE ====="
-
         if [ $BUILD_STATUS -ne 0 ] || grep -q "BUILD FAILURE" build.log; then
             echo "Build Failed"
             touch build_failed
-	    exit 1
         else
             echo "Build Success"
         fi
@@ -60,7 +54,7 @@ pipeline {
     }
 
     post {
-    failure {
+    always {
         echo 'Build Failed - AI Analysis Triggered'
 
         withCredentials([usernamePassword(
@@ -101,4 +95,4 @@ pipeline {
  }
 
 }
-
+i

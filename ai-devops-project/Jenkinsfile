@@ -42,6 +42,7 @@ pipeline {
         if [ $BUILD_STATUS -ne 0 ] || grep -q "BUILD FAILURE" build.log; then
             echo "Build Failed"
             touch build_failed
+	    exit 1
         else
             echo "Build Success"
         fi

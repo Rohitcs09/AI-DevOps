@@ -45,8 +45,14 @@ pipeline {
     }
 
     post {
-        failure {
-            echo 'Build Failed - AI Analysis Triggered'
+    failure {
+        echo 'Build Failed - AI Analysis Triggered'
+
+        withCredentials([usernamePassword(
+            credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',
+            usernameVariable: 'GIT_USER',
+            passwordVariable: 'GIT_PASS'
+        )]) {
 
             sh '''
             echo "Running AI Agent..."
@@ -64,12 +70,12 @@ pipeline {
             git commit -m "AI auto-fix commit" || echo "Nothing to commit"
 
             echo "Pushing changes..."
-            git push --set-upstream origin main
+            git push https://$GIT_USER:$GIT_PASS@github.com/Rohitcs09/AI-DevOps.git HEAD:main
             '''
         }
+    }
 
-        success {
-            echo 'Build Success - No AI Analysis Needed'
-        }
+    success {
+        echo 'Build Success - No AI Analysis Needed'
     }
 }

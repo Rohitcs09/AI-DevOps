@@ -1,9 +1,10 @@
+
 package com.example;
 
 public class Test {
     public static void main(String[] args) {
         System.out.println("Hello");
 
-        int a = ;   // ❌ Intentional Compilation Error
+        int a = 10;
     }
 }

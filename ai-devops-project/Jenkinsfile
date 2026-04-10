@@ -16,33 +16,40 @@ pipeline {
         }
 
         stage('Build with Maven') {
-            steps {
-                sh '''
-                pwd
-                ls -la
+    steps {
+        sh '''
+        set +e
+        set -o pipefail
 
-                cd ai-devops-project/ai-devops-maven
+        pwd
+        ls -la
 
-                echo "Running Maven Build..."
+        cd ai-devops-project/ai-devops-maven || exit 1
 
-                rm -f build.log
+        echo "Running Maven Build..."
 
-                mvn clean install 2>&1 | tee build.log || true
+        rm -f build.log
 
-                echo "===== BUILD LOG ====="
-                cat build.log
+        mvn clean install 2>&1 | tee build.log
 
-                echo "===== CHECKING FAILURE ====="
+        BUILD_STATUS=$?
 
-                if grep -q "BUILD FAILURE" build.log; then
-                    echo "Build Failed"
-                    
-                else
-                    echo "Build Success"
-                fi
-                '''
-            }
-        }
+        echo "===== BUILD LOG ====="
+        cat build.log
+
+        echo "===== CHECKING FAILURE ====="
+
+        if [ $BUILD_STATUS -ne 0 ] || grep -q "BUILD FAILURE" build.log; then
+            echo "Build Failed"
+            touch build_failed
+        else
+            echo "Build Success"
+        fi
+
+        exit 0
+        '''
+    }
+}
 
         stage('RUN AI Agent (Info Stage)') {
             steps {

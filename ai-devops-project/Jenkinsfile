@@ -19,17 +19,18 @@ pipeline {
     steps {
         script {
             def msg = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+            echo "Last commit message: ${msg}"
 
             if (msg.contains("[ai]")) {
                 echo "AI commit detected"
 
-                // अगर already fix हो गया → skip
-                if (!fileExists('ai-devops-project/ai-devops-maven/build_failed')) {
-                    echo "Already fixed → stopping loop"
+                // अगर build success है → stop
+                if (currentBuild.previousBuild?.result == 'SUCCESS') {
+                    echo "Previous build already SUCCESS → stopping loop"
                     currentBuild.result = 'SUCCESS'
-                    error("Stopping pipeline")
+                    error("Stopping pipeline to avoid loop")
                 } else {
-                    echo "Still failing → allow retry"
+                    echo "Previous build failed → allow retry"
                 }
             }
         }

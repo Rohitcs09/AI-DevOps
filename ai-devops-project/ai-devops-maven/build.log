@@ -39,8 +39,8 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  0.945 s
-[INFO] Finished at: 2026-04-11T19:50:43Z
+[INFO] Total time:  0.902 s
+[INFO] Finished at: 2026-04-11T19:51:05Z
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.15.0:compile (default-compile) on project ai-devops: Compilation failure: Compilation failure: 
 [ERROR] /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-devops-project/ai-devops-maven/src/main/java/com/example/AppTest.java:[3,17] package org.junit does not exist

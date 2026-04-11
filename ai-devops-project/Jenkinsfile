@@ -15,6 +15,27 @@ pipeline {
             }
         }
 
+	stage('Skip AI Loop') {
+    steps {
+        script {
+            def msg = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+
+            if (msg.contains("[ai]")) {
+                echo "AI commit detected"
+
+                // अगर already fix हो गया → skip
+                if (!fileExists('ai-devops-project/ai-devops-maven/build_failed')) {
+                    echo "Already fixed → stopping loop"
+                    currentBuild.result = 'SUCCESS'
+                    error("Stopping pipeline")
+                } else {
+                    echo "Still failing → allow retry"
+                }
+            }
+        }
+    }
+}
+
         stage('Build with Maven') {
     steps {
         sh '''

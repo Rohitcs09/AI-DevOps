@@ -29,18 +29,18 @@
 [ERROR] COMPILATION ERROR : 
 [INFO] -------------------------------------------------------------
 [ERROR] /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-devops-project/ai-devops-maven/src/main/java/com/example/Test.java:[6,36] ';' expected
-[ERROR] /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-devops-project/ai-devops-maven/src/main/java/com/example/Test.java:[8,17] illegal start of expression
+[ERROR] /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-devops-project/ai-devops-maven/src/main/java/com/example/Test.java:[8,19] ';' expected
 [INFO] 2 errors 
 [INFO] -------------------------------------------------------------
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.156 s
-[INFO] Finished at: 2026-04-10T23:26:58Z
+[INFO] Total time:  1.010 s
+[INFO] Finished at: 2026-04-11T19:23:05Z
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.15.0:compile (default-compile) on project ai-devops: Compilation failure: Compilation failure: 
 [ERROR] /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-devops-project/ai-devops-maven/src/main/java/com/example/Test.java:[6,36] ';' expected
-[ERROR] /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-devops-project/ai-devops-maven/src/main/java/com/example/Test.java:[8,17] illegal start of expression
+[ERROR] /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-devops-project/ai-devops-maven/src/main/java/com/example/Test.java:[8,19] ';' expected
 [ERROR] -> [Help 1]
 [ERROR] 
 [ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.

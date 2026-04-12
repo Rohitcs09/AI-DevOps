@@ -8,8 +8,8 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  0.308 s
-[INFO] Finished at: 2026-04-12T11:41:28Z
+[INFO] Total time:  0.319 s
+[INFO] Finished at: 2026-04-12T11:52:46Z
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal on project ai-devops: Could not resolve dependencies for project com.example:ai-devops:jar:1.0-SNAPSHOT
 [ERROR] dependency: wrong.group:fake-artifact:jar:1.0.0 (compile)

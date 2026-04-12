@@ -2,7 +2,7 @@ import os
 import subprocess
 import re
 
-LOG_FILE = "build.log"   # 🔥 IMPORTANT (same folder)
+LOG_FILE = "ai-devops-maven/build.log"   # 🔥 IMPORTANT (same folder)
 
 def run_command(cmd):
     print(f"⚙️ Running: {cmd}")

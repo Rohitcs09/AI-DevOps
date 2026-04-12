@@ -1,0 +1,26 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.example:ai-devops >------------------------
+[INFO] Building AI DevOps Demo 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from central: https://repo.maven.apache.org/maven2/wrong/group/wrong-artifact/1.0/wrong-artifact-1.0.pom
+[WARNING] The POM for wrong.group:wrong-artifact:jar:1.0 is missing, no dependency information available
+Downloading from central: https://repo.maven.apache.org/maven2/wrong/group/wrong-artifact/1.0/wrong-artifact-1.0.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.002 s
+[INFO] Finished at: 2026-04-12T18:09:57Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project ai-devops: Could not resolve dependencies for project com.example:ai-devops:jar:1.0-SNAPSHOT
+[ERROR] dependency: wrong.group:wrong-artifact:jar:1.0 (compile)
+[ERROR] 	Could not find artifact wrong.group:wrong-artifact:jar:1.0 in central (https://repo.maven.apache.org/maven2)
+[ERROR] 
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException

@@ -35,7 +35,7 @@ pipeline {
                 script {
                     def status = sh(script: '''
                         cd ai-devops-project/ai-devops-maven
-                        mvn clean install -U
+                        mvn clean install -U || tee build.log
                     ''', returnStatus: true)
 
                     if (status != 0) {

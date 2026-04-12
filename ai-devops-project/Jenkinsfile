@@ -31,22 +31,29 @@ pipeline {
         }
 
         stage('Build with Maven') {
-            steps {
-                script {
-                    def status = sh(script: '''
-                        cd ai-devops-project/ai-devops-maven
-                        mvn clean install -U || tee build.log
-                    ''', returnStatus: true)
+    steps {
+        script {
+            def status = sh(script: '''
+                cd ai-devops-project/ai-devops-maven
+                mvn clean install -U > build.log 2>&1
+            ''', returnStatus: true)
 
-                    if (status != 0) {
-                        echo "❌ Build Failed"
-                        writeFile file: 'ai-devops-project/ai-devops-maven/build_failed', text: 'failed'
-                    } else {
-                        echo "✅ Build Passed"
-                    }
-                }
+            // always read full log (IMPORTANT FIX)
+            def log = readFile 'ai-devops-project/ai-devops-maven/build.log'
+            echo "===== BUILD LOG START ====="
+            echo log
+            echo "===== BUILD LOG END ====="
+
+            // detect failure (same logic)
+            if (status != 0) {
+                echo "❌ Build Failed"
+                writeFile file: 'ai-devops-project/ai-devops-maven/build_failed', text: 'failed'
+            } else {
+                echo "✅ Build Passed"
             }
         }
+    }
+}
 
         stage('AI Fix') {
             when {

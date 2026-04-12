@@ -20,24 +20,16 @@
             <ns0:version>3.14.0</ns0:version>
         </ns0:dependency>
 
+<!-- 🚨 Intentional Broken Dependency for AI Fix Demo -->
+        <dependency>
+            <groupId>wrong.group</groupId>
+            <artifactId>fake-artifact</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     
   
     
 
-    <ns0:dependency>
-        <ns0:groupId>junit</ns0:groupId>
-        <ns0:artifactId>junit</ns0:artifactId>
-        <ns0:version>4.13.2</ns0:version>
-        <ns0:scope>test</ns0:scope>
-    </ns0:dependency>
-    
-
-    <ns0:dependency>
-        <ns0:groupId>junit</ns0:groupId>
-        <ns0:artifactId>junit</ns0:artifactId>
-        <ns0:version>4.13.2</ns0:version>
-        <ns0:scope>test</ns0:scope>
-    </ns0:dependency>
     
 </ns0:dependencies>
 

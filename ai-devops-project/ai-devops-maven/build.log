@@ -1,15 +1,24 @@
 [INFO] Scanning for projects...
-[ERROR] [ERROR] Some problems were encountered while processing the POMs:
-[FATAL] Non-parseable POM /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-devops-project/ai-devops-maven/pom.xml: Expected root element 'project' but found 'ns0:project' (position: START_TAG seen .../POM/4.0.0           http://maven.apache.org/xsd/maven-4.0.0.xsd">... @1:223)  @ line 1, column 223
- @ 
-[ERROR] The build could not read 1 project -> [Help 1]
-[ERROR]   
-[ERROR]   The project  (/var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-devops-project/ai-devops-maven/pom.xml) has 1 error
-[ERROR]     Non-parseable POM /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-devops-project/ai-devops-maven/pom.xml: Expected root element 'project' but found 'ns0:project' (position: START_TAG seen .../POM/4.0.0           http://maven.apache.org/xsd/maven-4.0.0.xsd">... @1:223)  @ line 1, column 223 -> [Help 2]
+[INFO] 
+[INFO] -----------------------< com.example:ai-devops >------------------------
+[INFO] Building AI DevOps Demo 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] The POM for wrong.group:fake-artifact:jar:1.0.0 is missing, no dependency information available
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.310 s
+[INFO] Finished at: 2026-04-12T13:01:21Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project ai-devops: Could not resolve dependencies for project com.example:ai-devops:jar:1.0-SNAPSHOT
+[ERROR] dependency: wrong.group:fake-artifact:jar:1.0.0 (compile)
+[ERROR] 	wrong.group:fake-artifact:jar:1.0.0 was not found in https://repo.maven.apache.org/maven2 during a previous attempt. This failure was cached in the local repository and resolution is not reattempted until the update interval of central has elapsed or updates are forced
+[ERROR] 
+[ERROR] -> [Help 1]
 [ERROR] 
 [ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
 [ERROR] Re-run Maven using the -X switch to enable full debug logging.
 [ERROR] 
 [ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/ProjectBuildingException
-[ERROR] [Help 2] http://cwiki.apache.org/confluence/display/MAVEN/ModelParseException
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException

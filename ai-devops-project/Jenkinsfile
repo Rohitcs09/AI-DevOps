@@ -92,7 +92,7 @@ pipeline {
                     sh '''
                     cd ai-devops-project
 
-                    python3 ai_agent.py
+                    python3 ai_dependency_agent.py
 
                     git config user.email "jenkins@ai.com"
                     git config user.name "Jenkins AI Bot"

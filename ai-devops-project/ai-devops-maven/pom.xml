@@ -11,4 +11,15 @@
 
     <name>AI DevOps Demo</name>
 
+    <dependencies>
+    
+    <!-- ❌ Wrong Dependency (intentional error) -->
+    <dependency>
+        <groupId>wrong.group</groupId>
+        <artifactId>fake-artifact</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+
+</dependencies>
+
 </project>

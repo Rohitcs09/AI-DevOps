@@ -1,48 +1,42 @@
 import os
-import subprocess
 import re
+import subprocess
 
-LOG_FILE = "ai-devops-maven/build.log"   # 🔥 IMPORTANT (same folder)
+# ✅ IMPORTANT: Agent will run inside ai-devops-maven folder
+LOG_FILE = "build.log"
+POM_FILE = "pom.xml"
+
 
 def run_command(cmd):
     print(f"⚙️ Running: {cmd}")
-    result = subprocess.run(cmd, shell=True)
-    return result.returncode
+    subprocess.run(cmd, shell=True)
 
 
 def fix_dependency():
     print("🔧 Fixing dependency issue...")
 
-    pom_path = "pom.xml"   # ✅ correct path
+    print("📂 Working Directory:", os.getcwd())
+    print("📂 POM Path:", os.path.abspath(POM_FILE))
 
-    print(f"📂 Using file: {os.path.abspath(pom_path)}")
-
-    if not os.path.exists(pom_path):
+    if not os.path.exists(POM_FILE):
         print("❌ pom.xml not found")
         return
 
-    with open(pom_path, "r") as file:
+    with open(POM_FILE, "r") as file:
         content = file.read()
 
-    # 🔍 check मौजूद है या नहीं
-    if "wrong.group" not in content:
-        print("⚠️ No wrong dependency found")
-        return
+    print("🚨 Removing wrong dependency...")
 
-    print("🔍 Removing wrong dependency...")
-
-    # ❌ remove wrong dependency (regex)
+    # ✅ Strong regex (handles spaces, comments, multiline)
     content = re.sub(
-        r"<dependency>.*?wrong\.group.*?</dependency>",
+        r"<dependency>[\s\S]*?wrong\.group[\s\S]*?</dependency>",
         "",
-        content,
-        flags=re.DOTALL
+        content
     )
 
     print("➕ Adding correct dependency...")
 
-    # ✅ correct dependency
-    correct_dep = """
+    correct_dependency = """
     <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
@@ -51,40 +45,41 @@ def fix_dependency():
     </dependency>
     """
 
-    # insert before </dependencies>
-    content = content.replace("</dependencies>", correct_dep + "\n</dependencies>")
+    # ✅ Insert before closing tag
+    content = content.replace("</dependencies>", correct_dependency + "\n</dependencies>")
 
-    # 💾 write back
-    with open(pom_path, "w") as file:
+    with open(POM_FILE, "w") as file:
         file.write(content)
 
-    print("✅ pom.xml updated successfully!")
-
-    # 🔥 Git commit + push
-    run_command('git config user.email "ai-bot@example.com"')
-    run_command('git config user.name "AI Bot"')
-    run_command('git add .')
-    run_command('git commit -m "AI auto-fix dependency error"')
-
-    # ⚠️ Replace this
-    run_command('git push https://USERNAME:TOKEN@github.com/USERNAME/REPO.git HEAD:main')
+    print("✅ pom.xml UPDATED SUCCESSFULLY!")
 
 
 def analyze_logs():
     print("🤖 AI analyzing logs...")
 
+    print("📂 Looking for log at:", os.path.abspath(LOG_FILE))
+
     if not os.path.exists(LOG_FILE):
-        print(f"❌ Log file not found: {LOG_FILE}")
+        print("❌ Log file not found")
         return
 
     with open(LOG_FILE, "r") as file:
         logs = file.read()
 
-    if "Could not find artifact" in logs:
+    print("📄 LOG LENGTH:", len(logs))
+    print("📄 LOG PREVIEW:\n", logs[:300])
+
+    # ✅ SUPER RELAXED detection (guaranteed trigger)
+    if (
+        "wrong.group" in logs
+        or "fake-artifact" in logs
+        or "Could not resolve dependencies" in logs
+        or "BUILD FAILURE" in logs
+    ):
         print("🚨 Dependency error detected!")
         fix_dependency()
     else:
-        print("✅ No dependency issue detected")
+        print("❌ No dependency issue detected")
 
 
 if __name__ == "__main__":

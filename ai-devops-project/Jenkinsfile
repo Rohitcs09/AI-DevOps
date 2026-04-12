@@ -10,105 +10,115 @@ pipeline {
         stage('Clone Code') {
             steps {
                 git branch: 'main',
-                    credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',   // ✅ Added
+                    credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',
                     url: 'https://github.com/Rohitcs09/AI-DevOps.git'
             }
         }
 
-	stage('Skip AI Loop') {
-    steps {
-        script {
-            def msg = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
-            echo "Last commit message: ${msg}"
+        stage('Skip AI Loop') {
+            steps {
+                script {
+                    def msg = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+                    echo "Last commit message: ${msg}"
 
-            if (msg.contains("[ai]")) {
-                echo "AI commit detected"
+                    if (msg.contains("[ai]")) {
+                        echo "AI commit detected"
 
-                // अगर build success है → stop
-                if (currentBuild.previousBuild?.result == 'SUCCESS') {
-                    echo "Previous build already SUCCESS → stopping loop"
-                    currentBuild.result = 'SUCCESS'
-                    error("Stopping pipeline to avoid loop")
-                } else {
-                    echo "Previous build failed → allow retry"
+                        if (currentBuild.previousBuild?.result == 'SUCCESS') {
+                            echo "Previous build already SUCCESS → stopping loop"
+                            currentBuild.result = 'SUCCESS'
+                            error("Stopping pipeline to avoid loop")
+                        } else {
+                            echo "Previous build failed → allow retry"
+                        }
+                    }
                 }
             }
         }
-    }
-}
 
         stage('Build with Maven') {
-    steps {
-        sh '''
-        set +e
-        set -o pipefail
+            steps {
+                sh '''
+                set +e
+                set -o pipefail
 
-        cd ai-devops-project/ai-devops-maven || exit 1
+                cd ai-devops-project/ai-devops-maven || exit 1
 
-        echo "Running Maven Build..."
+                echo "Running Maven Build..."
 
-        rm -f build.log
+                rm -f build.log build_failed
 
-        mvn clean install 2>&1 | tee build.log
+                mvn clean install 2>&1 | tee build.log
 
-        BUILD_STATUS=$?
+                BUILD_STATUS=$?
 
-        echo "===== BUILD LOG ====="
-        cat build.log
+                echo "===== BUILD LOG ====="
+                cat build.log
 
-        if [ $BUILD_STATUS -ne 0 ] || grep -q "BUILD FAILURE" build.log; then
-            echo "Build Failed"
-            touch build_failed
-        else
-            echo "Build Success"
-        fi
+                if [ $BUILD_STATUS -ne 0 ] || grep -q "BUILD FAILURE" build.log; then
+                    echo "Build Failed"
+                    touch build_failed
+                else
+                    echo "Build Success"
+                fi
 
-        exit 0
-        '''
-    }
-}
+                exit 0
+                '''
+            }
+        }
 
         stage('RUN AI Agent (Info Stage)') {
             steps {
                 echo "AI Agent will run automatically if build fails"
             }
         }
-    }
 
-    post {
-    always {
-        script {
-            def isFailed = fileExists('ai-devops-project/ai-devops-maven/build_failed')
-
-            if (isFailed) {
-                echo 'Build Failed - AI Analysis Triggered'
-
-                withCredentials([usernamePassword(
-                    credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',
-                    usernameVariable: 'GIT_USER',
-                    passwordVariable: 'GIT_PASS'
-                )]) {
-
-                    sh '''
-                    cd ai-devops-project
-
-                    python3 ai_dependency_agent.py
-
-                    git config user.email "jenkins@ai.com"
-                    git config user.name "Jenkins AI Bot"
-
-                    git add .
-                    git commit -m "AI auto-fix commit" || echo "Nothing to commit"
-
-                    git remote set-url origin https://$GIT_USER:$GIT_PASS@github.com/Rohitcs09/AI-DevOps.git
-                    git push origin main
-                    '''
-                }
-
-            } else {
-                echo 'Build Success - No AI Analysis Needed'
+        stage('Rebuild After AI Fix') {
+            steps {
+                sh '''
+                cd ai-devops-project/ai-devops-maven
+                mvn clean install
+                '''
             }
         }
     }
-}
+
+    post {
+        always {
+            script {
+                def isFailed = fileExists('ai-devops-project/ai-devops-maven/build_failed')
+
+                if (isFailed) {
+                    echo 'Build Failed - AI Analysis Triggered'
+
+                    withCredentials([usernamePassword(
+                        credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',
+                        usernameVariable: 'GIT_USER',
+                        passwordVariable: 'GIT_PASS'
+                    )]) {
+
+                        sh '''
+                        cd ai-devops-project/ai-devops-maven
+
+                        echo "Running AI Agent from correct directory..."
+
+                        python3 ../ai_dependency_agent.py
+
+                        git config user.email "jenkins@ai.com"
+                        git config user.name "Jenkins AI Bot"
+
+                        git add .
+                        git commit -m "[ai] auto-fix dependency issue" || echo "Nothing to commit"
+
+                        git remote set-url origin https://$GIT_USER:$GIT_PASS@github.com/Rohitcs09/AI-DevOps.git
+                        git push origin main
+                        '''
+                    }
+
+                } else {
+                    echo 'Build Success - No AI Analysis Needed'
+                }
+            }
+        }
+    }
 }

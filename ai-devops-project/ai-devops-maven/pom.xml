@@ -1,22 +1,32 @@
-<ns0:project xmlns:ns0="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0           http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <ns0:modelVersion>4.0.0</ns0:modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-    <ns0:groupId>com.example</ns0:groupId>
-    <ns0:artifactId>ai-devops</ns0:artifactId>
-    <ns0:version>1.0-SNAPSHOT</ns0:version>
+    <groupId>com.example</groupId>
+    <artifactId>ai-devops</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-    <ns0:name>AI DevOps Demo</ns0:name>
+    <name>AI DevOps Demo</name>
 
-    <ns0:dependencies>
+    <dependencies>
 
-        
-        <ns0:dependency>
-            <ns0:groupId>org.apache.commons</ns0:groupId>
-            <ns0:artifactId>commons-lang3</ns0:artifactId>
-            <ns0:version>3.14.0</ns0:version>
-        </ns0:dependency>
+        <!-- Broken dependency -->
+        <dependency>
+            <groupId>wrong.group</groupId>
+            <artifactId>wrong-artifact</artifactId>
+            <version>1.0</version>
+        </dependency>
 
-    <dependency><groupId>junit</groupId><artifactId>junit</artifactId><version>4.13.2</version><scope>test</scope></dependency><dependency><groupId>junit</groupId><artifactId>junit</artifactId><version>4.13.2</version><scope>test</scope></dependency></ns0:dependencies>
+        <!-- Valid dependency -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.14.0</version>
+        </dependency>
 
-</ns0:project>
+    </dependencies>
+
+</project>

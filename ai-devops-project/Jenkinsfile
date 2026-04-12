@@ -36,7 +36,7 @@ pipeline {
                 set +e
                 set -o pipefail
 
-                cd ai-devops-project/ai-devops-maven || exit 1
+                cd ai-devops-project/ai-devops-maven 
 
                 rm -f build_failed
 

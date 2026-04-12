@@ -12,14 +12,21 @@
     <name>AI DevOps Demo</name>
 
     <dependencies>
-    
-    <!-- ❌ Wrong Dependency (intentional error) -->
-    <dependency>
-        <groupId>wrong.group</groupId>
-        <artifactId>fake-artifact</artifactId>
-        <version>1.0.0</version>
-    </dependency>
 
-</dependencies>
+        <!-- 🚨 Intentional Broken Dependency for AI Fix Demo -->
+        <dependency>
+            <groupId>wrong.group</groupId>
+            <artifactId>fake-artifact</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- ✅ Optional: One correct dependency (for comparison) -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.14.0</version>
+        </dependency>
+
+    </dependencies>
 
 </project>

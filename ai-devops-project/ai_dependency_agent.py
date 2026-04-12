@@ -1,4 +1,5 @@
 import os
+s
 import subprocess
 
 # 📌 Correct log file path (as per your project)
@@ -16,7 +17,7 @@ def run_command(cmd):
 def fix_dependency():
     print("🔧 Fixing dependency issue...")
 
-    pom_path = "pom.xml"
+    pom_path = "AI-DevOps/ai-devops-project/ai-devops-maven/pom.xml"
 
     if not os.path.exists(pom_path):
         print("❌ pom.xml not found")

@@ -22,7 +22,7 @@
 [INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ ai-devops ---
 [INFO] Recompiling the module because of changed source code.
 [WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
-[INFO] Compiling 2 source files with javac [debug target 1.8] to target/test-classes
+[INFO] Compiling 1 source file with javac [debug target 1.8] to target/test-classes
 [WARNING] bootstrap class path not set in conjunction with -source 8
 [WARNING] source value 8 is obsolete and will be removed in a future release
 [WARNING] target value 8 is obsolete and will be removed in a future release
@@ -35,7 +35,7 @@
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
 [INFO] Running com.example.AppTest
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.061 s -- in com.example.AppTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.054 s -- in com.example.AppTest
 [INFO] 
 [INFO] Results:
 [INFO] 
@@ -52,6 +52,6 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  3.051 s
-[INFO] Finished at: 2026-04-12T18:50:21Z
+[INFO] Total time:  3.025 s
+[INFO] Finished at: 2026-04-12T19:15:24Z
 [INFO] ------------------------------------------------------------------------

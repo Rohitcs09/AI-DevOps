@@ -41,7 +41,7 @@
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
 [INFO] Running com.example.AppTest
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.083 s -- in com.example.AppTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.044 s -- in com.example.AppTest
 [INFO] 
 [INFO] Results:
 [INFO] 
@@ -57,6 +57,6 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  5.487 s
-[INFO] Finished at: 2026-04-16T00:55:10Z
+[INFO] Total time:  2.308 s
+[INFO] Finished at: 2026-04-16T00:55:31Z
 [INFO] ------------------------------------------------------------------------

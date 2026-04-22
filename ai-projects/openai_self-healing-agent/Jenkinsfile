@@ -10,7 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                cd ai-devops-maven
+                cd ai-projects/openai_self-healing-agent/ai-devops-maven
                 mvn clean install > build.log || true
                 '''
             }
@@ -20,6 +20,14 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'OPENAI_API_KEY', variable: 'OPENAI_API_KEY')]) {
                     sh '''
+                    echo "📂 Workspace Path:"
+                    pwd
+
+                    echo "📂 Full Structure:"
+                    ls -R
+
+                    cd ai-projects/openai_self-healing-agent
+
                     export OPENAI_API_KEY=$OPENAI_API_KEY
                     python3 ai-agent.py
                     '''
@@ -30,7 +38,7 @@ pipeline {
         stage('Rebuild') {
             steps {
                 sh '''
-                cd ai-devops-maven
+                cd ai-projects/openai_self-healing-agent/ai-devops-maven
                 mvn clean install
                 '''
             }

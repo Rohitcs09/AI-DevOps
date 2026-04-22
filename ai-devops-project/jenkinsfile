@@ -1,0 +1,119 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven3'
+    }
+
+    stages {
+
+        stage('Clone Code') {
+            steps {
+                git branch: 'main',
+                    credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',
+                    url: 'https://github.com/Rohitcs09/AI-DevOps.git'
+            }
+        }
+
+        stage('Skip AI Loop') {
+            steps {
+                script {
+                    def msg = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+                    echo "Last commit message: ${msg}"
+
+                    if (msg.contains("[ai]")) {
+                        echo "AI commit detected → stopping loop"
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    }
+                }
+            }
+        }
+
+        stage('Build with Maven') {
+    steps {
+        script {
+            def status = sh(script: '''
+                cd ai-devops-project/ai-devops-maven
+                mvn clean install -U > build.log 2>&1
+            ''', returnStatus: true)
+
+            // always read full log (IMPORTANT FIX)
+            def log = readFile 'ai-devops-project/ai-devops-maven/build.log'
+            echo "===== BUILD LOG START ====="
+            echo log
+            echo "===== BUILD LOG END ====="
+
+            // detect failure (same logic)
+            if (status != 0) {
+                echo "❌ Build Failed"
+                writeFile file: 'ai-devops-project/ai-devops-maven/build_failed', text: 'failed'
+            } else {
+                echo "✅ Build Passed"
+            }
+        }
+    }
+}
+
+        stage('AI Fix') {
+            when {
+                expression {
+                    return fileExists('ai-devops-project/ai-devops-maven/build_failed')
+                }
+            }
+            steps {
+                script {
+                    echo "🤖 Running AI Fix..."
+
+                    withCredentials([usernamePassword(
+                        credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',
+                        usernameVariable: 'GIT_USER',
+                        passwordVariable: 'GIT_PASS'
+                    )]) {
+
+                        sh '''
+                        cd ai-devops-project/ai-devops-maven
+
+                        python3 ../ai_dependency_agent.py
+
+                        git config user.email "jenkins@ai.com"
+                        git config user.name "Jenkins AI Bot"
+
+                        git add .
+
+                        if git diff --cached --quiet; then
+                          echo "No changes"
+                        else
+                          git commit -m "[ai] auto-fix dependency issue"
+                          git remote set-url origin https://$GIT_USER:$GIT_PASS@github.com/Rohitcs09/AI-DevOps.git
+                          git push origin main
+                        fi
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Rebuild After Fix') {
+            when {
+                expression {
+                    return fileExists('ai-devops-project/ai-devops-maven/build_failed')
+                }
+            }
+            steps {
+                script {
+                    def status = sh(script: '''
+                        cd ai-devops-project/ai-devops-maven
+                        mvn clean install -U
+                    ''', returnStatus: true)
+
+                    if (status != 0) {
+                        error("❌ Build still failing after AI fix")
+                    } else {
+                        echo "✅ Build Fixed Successfully"
+                    }
+                }
+            }
+        }
+    }
+}

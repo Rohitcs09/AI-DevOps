@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-LOG_FILE = "build.log"
+LOG_FILE = "ai-devops-maven/build.log"
 
 def read_logs():
     if not os.path.exists(LOG_FILE):

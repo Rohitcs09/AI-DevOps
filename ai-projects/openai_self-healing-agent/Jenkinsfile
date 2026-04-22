@@ -1,22 +1,38 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven3'
+    }
+
     stages {
+
         stage('Build') {
             steps {
-                sh 'mvn clean install > build.log || true'
+                sh '''
+                cd ai-devops-maven
+                mvn clean install > build.log || true
+                '''
             }
         }
 
         stage('AI Debug') {
             steps {
-                sh 'python ai_agent.py'
+                withCredentials([string(credentialsId: 'OPENAI_API_KEY', variable: 'OPENAI_API_KEY')]) {
+                    sh '''
+                    export OPENAI_API_KEY=$OPENAI_API_KEY
+                    python ai-agent.py
+                    '''
+                }
             }
         }
 
         stage('Rebuild') {
             steps {
-                sh 'mvn clean install'
+                sh '''
+                cd ai-devops-maven
+                mvn clean install
+                '''
             }
         }
     }

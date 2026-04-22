@@ -17,23 +17,22 @@ pipeline {
         }
 
         stage('AI Debug') {
-            steps {
-                withCredentials([string(credentialsId: 'OPENAI_API_KEY', variable: 'OPENAI_API_KEY')]) {
-                    sh '''
-                    echo "📂 Workspace Path:"
-                    pwd
+    steps {
+        withCredentials([string(credentialsId: 'OPENAI_API_KEY', variable: 'OPENAI_API_KEY')]) {
+            sh '''
+            cd ai-projects/openai_self-healing-agent
 
-                    echo "📂 Full Structure:"
-                    ls -R
+            echo "📦 Installing Python dependencies..."
+            python3 -m pip install --user -r requirements.txt
 
-                    cd ai-projects/openai_self-healing-agent
+            export OPENAI_API_KEY=$OPENAI_API_KEY
 
-                    export OPENAI_API_KEY=$OPENAI_API_KEY
-                    python3 ai-agent.py
-                    '''
-                }
-            }
+            echo "🤖 Running AI Agent..."
+            python3 ai-agent.py
+            '''
         }
+    }
+}
 
         stage('Rebuild') {
             steps {

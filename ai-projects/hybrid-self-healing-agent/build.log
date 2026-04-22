@@ -1,0 +1,115 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< com.ai:self-healing >-------------------------
+[INFO] Building self-healing 1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from central: https://repo.maven.apache.org/maven2/junit/junit/3.8.3/junit-3.8.3.pom
+[WARNING] The POM for junit:junit:jar:3.8.3 is missing, no dependency information available
+Downloading from central: https://repo.maven.apache.org/maven2/junit/junit/3.8.3/junit-3.8.3.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.717 s
+[INFO] Finished at: 2026-04-21T18:40:10Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project self-healing: Could not resolve dependencies for project com.ai:self-healing:jar:1.0
+[ERROR] dependency: junit:junit:jar:3.8.3 (test)
+[ERROR] 	Could not find artifact junit:junit:jar:3.8.3 in central (https://repo.maven.apache.org/maven2)
+[ERROR] 
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
+
+
+===== ATTEMPT 1 =====
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< com.ai:self-healing >-------------------------
+[INFO] Building self-healing 1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] The POM for junit:junit:jar:3.8.3 is missing, no dependency information available
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.538 s
+[INFO] Finished at: 2026-04-21T18:40:15Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project self-healing: Could not resolve dependencies for project com.ai:self-healing:jar:1.0
+[ERROR] dependency: junit:junit:jar:3.8.3 (test)
+[ERROR] 	junit:junit:jar:3.8.3 was not found in https://repo.maven.apache.org/maven2 during a previous attempt. This failure was cached in the local repository and resolution is not reattempted until the update interval of central has elapsed or updates are forced
+[ERROR] 
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
+
+--- ERRORS ---
+
+👉 Missing semicolon detected
+
+👉 Fixed Java syntax (semicolon added)
+
+👉 JUnit dependency set to 4.13.2
+
+👉 Re-running build after fixes
+
+
+===== ATTEMPT 2 =====
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< com.ai:self-healing >-------------------------
+[INFO] Building self-healing 1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ self-healing ---
+[INFO] Deleting /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/hybrid-self-healing-agent/target
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ self-healing ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/hybrid-self-healing-agent/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ self-healing ---
+[INFO] Recompiling the module because of changed source code.
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 1 source file with javac [debug target 1.8] to target/classes
+[WARNING] bootstrap class path not set in conjunction with -source 8
+[WARNING] source value 8 is obsolete and will be removed in a future release
+[WARNING] target value 8 is obsolete and will be removed in a future release
+[WARNING] To suppress warnings about obsolete options, use -Xlint:-options.
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ self-healing ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/hybrid-self-healing-agent/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ self-healing ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ self-healing ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.5.0:jar (default-jar) @ self-healing ---
+[INFO] Building jar: /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/hybrid-self-healing-agent/target/self-healing-1.0.jar
+[INFO] 
+[INFO] --- install:3.1.4:install (default-install) @ self-healing ---
+[INFO] Installing /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/hybrid-self-healing-agent/pom.xml to /var/jenkins_home/.m2/repository/com/ai/self-healing/1.0/self-healing-1.0.pom
+[INFO] Installing /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/hybrid-self-healing-agent/target/self-healing-1.0.jar to /var/jenkins_home/.m2/repository/com/ai/self-healing/1.0/self-healing-1.0.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.130 s
+[INFO] Finished at: 2026-04-21T18:40:25Z
+[INFO] ------------------------------------------------------------------------
+
+--- ERRORS ---
+
+👉 Build succeeded

@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn clean install > build.log || true'
+            }
+        }
+
+        stage('AI Debug') {
+            steps {
+                sh 'python ai_agent.py'
+            }
+        }
+
+        stage('Rebuild') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 import os
 import re
 
-LOG_FILE = "../build.log"
+LOG_FILE = "/var/jenkins_home/workspace/AI-DevOps-Pipeline/build.log"
 JAVA_FILE = None
 
 # 🔍 Find Java file

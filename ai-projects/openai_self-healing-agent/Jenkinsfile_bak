@@ -1,0 +1,146 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven3'
+    }
+
+    stages {
+
+        stage('Clone Code') {
+            steps {
+                git branch: 'main',
+                    credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',
+                    url: 'https://github.com/Rohitcs09/AI-DevOps.git'
+            }
+        }
+
+        stage('Skip AI Loop') {
+            steps {
+                script {
+                    def msg = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+                    echo "Last commit message: ${msg}"
+
+                    if (msg.contains("[ai]")) {
+                        echo "AI commit detected → stopping loop"
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    }
+                }
+            }
+        }
+
+        // -------------------------------
+        // 🚀 BUILD STAGE (LOG FIXED)
+        // -------------------------------
+        stage('Build with Maven') {
+            steps {
+                script {
+                    def status = sh(script: '''
+                        cd ai-projects/openai_self-healing-agent/ai-devops-maven
+
+                        echo "🚀 Running Maven Build..."
+                        mvn clean install -U > build.log 2>&1 
+                    ''', returnStatus: true)
+
+                    def log = readFile 'ai-projects/openai_self-healing-agent/ai-devops-maven/build.log'
+
+                    echo "===== BUILD LOG START ====="
+                    echo log
+                    echo "===== BUILD LOG END ====="
+
+                    if (status != 0) {
+                        echo "❌ Build Failed"
+                        writeFile file: 'ai-projects/openai_self-healing-agent/build_failed', text: 'failed'
+                    } else {
+                        echo "✅ Build Passed"
+                    }
+                }
+            }
+        }
+
+        // -------------------------------
+        // 🤖 AI FIX STAGE
+        // -------------------------------
+        stage('AI Fix') {
+            when {
+                expression {
+                    return fileExists('ai-projects/openai_self-healing-agent/build_failed')
+                }
+            }
+            steps {
+                script {
+                    echo "🤖 Running AI Fix..."
+
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',
+                            usernameVariable: 'GIT_USER',
+                            passwordVariable: 'GIT_PASS'
+                        ),
+                        string(credentialsId: 'OPENAI_API_KEY', variable: 'OPENAI_API_KEY')
+                    ]) {
+
+                        sh '''
+                        cd ai-projects/openai_self-healing-agent
+
+                        echo "📂 Current Path:"
+                        pwd
+
+                        echo "📂 Project Structure:"
+                        ls -R
+
+                        echo "📦 Installing Python dependencies..."
+                        python3 -m pip install --break-system-packages openai python-dotenv
+
+                        export OPENAI_API_KEY=$OPENAI_API_KEY
+
+                        echo "🤖 Running AI Agent..."
+                        python3 ai-agent.py
+
+                        git config user.email "jenkins@ai.com"
+                        git config user.name "Jenkins AI Bot"
+
+                        git add .
+
+                        if git diff --cached --quiet; then
+                          echo "No changes"
+                        else
+                          git commit -m "[ai] auto-fix code + dependency issue"
+                          git remote set-url origin https://$GIT_USER:$GIT_PASS@github.com/Rohitcs09/AI-DevOps.git
+                          git push origin main
+                        fi
+                        '''
+                    }
+                }
+            }
+        }
+
+        // -------------------------------
+        // 🔁 REBUILD AFTER FIX
+        // -------------------------------
+        stage('Rebuild After Fix') {
+            when {
+                expression {
+                    return fileExists('ai-projects/openai_self-healing-agent/build_failed')
+                }
+            }
+            steps {
+                script {
+                    def status = sh(script: '''
+                        cd ai-projects/openai_self-healing-agent/ai-devops-maven
+
+                        echo "🔁 Rebuilding after AI fix..."
+                        mvn clean install -U
+                    ''', returnStatus: true)
+
+                    if (status != 0) {
+                        error("❌ Build still failing after AI fix")
+                    } else {
+                        echo "✅ Build Fixed Successfully"
+                    }
+                }
+            }
+        }
+    }
+}

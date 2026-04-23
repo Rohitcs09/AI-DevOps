@@ -47,7 +47,7 @@ pipeline {
     }
 }
 
-        stage('Rebuild After Fix') {
+stage('Rebuild After Fix') {
     when {
         expression {
             return fileExists('ai-projects/openai_self-healing-agent/build_failed')
@@ -67,5 +67,4 @@ pipeline {
             }
         }
     }
-}
 }

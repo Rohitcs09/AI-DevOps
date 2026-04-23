@@ -34,8 +34,8 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.090 s
-[INFO] Finished at: 2026-04-23T19:32:33Z
+[INFO] Total time:  1.081 s
+[INFO] Finished at: 2026-04-23T19:37:15Z
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.15.0:compile (default-compile) on project self-healing: Compilation failure
 [ERROR] /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/openai_self-healing-agent/ai-devops-maven/src/main/java/App.java:[3,39] ';' expected

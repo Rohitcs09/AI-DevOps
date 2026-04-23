@@ -1,10 +1,12 @@
 import os
 import re
 
-LOG_FILE = "/var/jenkins_home/workspace/AI-DevOps-Pipeline/build.log"
+# 📄 Correct log file path (from Jenkins root)
+LOG_FILE = os.path.abspath(os.path.join(os.getcwd(), "../../build.log"))
+
 JAVA_FILE = None
 
-# 🔍 Find Java file
+# 🔍 Auto-detect Java file
 for root, dirs, files in os.walk("."):
     for file in files:
         if file.endswith(".java"):
@@ -28,8 +30,7 @@ def fix_semicolon():
     new_lines = []
 
     for line in lines:
-        # detect println without semicolon
-        if 'System.out.println' in line and not line.strip().endswith(";"):
+        if "System.out.println" in line and ";" not in line:
             print("⚡ Fixing missing semicolon...")
             line = line.rstrip() + ";\n"
             fixed = True
@@ -42,7 +43,7 @@ def fix_semicolon():
         print("✅ Semicolon fixed")
         return True
 
-    print("ℹ️ No semicolon issue found")
+    print("ℹ️ No syntax issue found")
     return False
 
 
@@ -76,10 +77,13 @@ def fix_junit():
 
 
 # -----------------------------
-# 🤖 MAIN LOGIC
+# 🤖 MAIN AI LOGIC
 # -----------------------------
 def auto_fix():
     print("🤖 AI Agent Started...\n")
+
+    print("📂 Current Dir:", os.getcwd())
+    print("📄 Looking for log at:", LOG_FILE)
 
     if not os.path.exists(LOG_FILE):
         print("❌ build.log not found")
@@ -88,15 +92,17 @@ def auto_fix():
     with open(LOG_FILE, "r") as f:
         log = f.read()
 
-    print("📄 Analyzing logs...\n")
+    print("\n📄 Analyzing logs...\n")
+    print("🔍 Log Preview:\n", log[:500])
 
     fixed_any = False
 
-    # Detect syntax error
-    if "';' expected" in log:
+    # 🔥 Robust Syntax Detection
+    if re.search(r"; expected", log) or re.search(r"';' expected", log):
+        print("\n🚨 Syntax error detected!")
         fixed_any = fix_semicolon()
 
-    # Detect junit issue
+    # 🔥 JUnit Detection
     if "junit" in log.lower():
         fixed_any = fix_junit() or fixed_any
 

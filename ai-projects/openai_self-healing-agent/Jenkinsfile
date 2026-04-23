@@ -16,17 +16,23 @@ pipeline {
         pwd
 
         echo "🚀 Running Maven Build..."
-        mvn clean install > ../build.log 2>&1 || true
 
-        echo "📂 After Build:"
-        ls -l ..
+        # FORCE log creation
+        mvn clean install > build.log 2>&1 || true
+
+        echo "📂 Files after build:"
+        ls -l
 
         echo "📄 Checking build.log:"
-        cat ../build.log || echo "❌ build.log not found"
+        if [ -f build.log ]; then
+            echo "✅ build.log created"
+            head -20 build.log
+        else
+            echo "❌ build.log NOT created"
+        fi
         '''
     }
 }
-
         stage('AI Debug') {
     steps {
         withCredentials([string(credentialsId: 'OPENAI_API_KEY', variable: 'OPENAI_API_KEY')]) {

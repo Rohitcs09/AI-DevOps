@@ -12,7 +12,17 @@ pipeline {
         sh '''
         cd ai-projects/openai_self-healing-agent/ai-devops-maven
 
+        echo "📂 Current Path:"
+        pwd
+
+        echo "🚀 Running Maven Build..."
         mvn clean install > ../build.log 2>&1 || true
+
+        echo "📂 After Build:"
+        ls -l ..
+
+        echo "📄 Checking build.log:"
+        cat ../build.log || echo "❌ build.log not found"
         '''
     }
 }

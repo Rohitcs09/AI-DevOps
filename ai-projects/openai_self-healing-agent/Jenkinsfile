@@ -8,13 +8,14 @@ pipeline {
     stages {
 
         stage('Build') {
-            steps {
-                sh '''
-                cd ai-projects/openai_self-healing-agent/ai-devops-maven
-                mvn clean install > build.log || true
-                '''
-            }
-        }
+    steps {
+        sh '''
+        cd ai-projects/openai_self-healing-agent/ai-devops-maven
+
+        mvn clean install > ../build.log 2>&1 || true
+        '''
+    }
+}
 
         stage('AI Debug') {
     steps {

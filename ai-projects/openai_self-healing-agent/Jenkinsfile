@@ -22,20 +22,13 @@ pipeline {
             sh '''
             cd ai-projects/openai_self-healing-agent
 
-            echo "🐍 Creating venv..."
-            python3 -m venv venv
-
-            echo "⚙️ Activating venv..."
-            . venv/bin/activate
-
-            echo "📦 Installing dependencies..."
-            pip install --upgrade pip
-            pip install openai python-dotenv
+            echo "📦 Installing dependencies (force)..."
+            python3 -m pip install --break-system-packages openai python-dotenv
 
             export OPENAI_API_KEY=$OPENAI_API_KEY
 
             echo "🤖 Running AI Agent..."
-            python ai-agent.py
+            python3 ai-agent.py
             '''
         }
     }

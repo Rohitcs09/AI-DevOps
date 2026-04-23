@@ -2,8 +2,8 @@ import os
 import re
 
 # 📄 Correct log file path (from Jenkins root)
-LOG_FILE = os.path.abspath(os.path.join(os.getcwd(), "../../build.log"))
-
+# LOG_FILE = os.path.abspath(os.path.join(os.getcwd(), "../../build.log"))
+LOG_FILE = "ai-devops-maven/build.log"
 JAVA_FILE = None
 
 # 🔍 Auto-detect Java file

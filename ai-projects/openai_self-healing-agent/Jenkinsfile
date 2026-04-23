@@ -7,30 +7,26 @@ pipeline {
 
     stages {
 
-        stage('Build') {
+        stage('Build with Maven') {
     steps {
-        sh '''
-        cd ai-projects/openai_self-healing-agent/ai-devops-maven
+        script {
+            def status = sh(script: '''
+                cd ai-projects/openai_self-healing-agent/ai-devops-maven
+                mvn clean install -U > build.log 2>&1
+            ''', returnStatus: true)
 
-        echo "📂 Current Path:"
-        pwd
+            def log = readFile 'ai-projects/openai_self-healing-agent/ai-devops-maven/build.log'
+            echo "===== BUILD LOG START ====="
+            echo log
+            echo "===== BUILD LOG END ====="
 
-        echo "🚀 Running Maven Build..."
-
-        # FORCE log creation
-        mvn clean install > build.log 2>&1 || true
-
-        echo "📂 Files after build:"
-        ls -l
-
-        echo "📄 Checking build.log:"
-        if [ -f build.log ]; then
-            echo "✅ build.log created"
-            head -20 build.log
-        else
-            echo "❌ build.log NOT created"
-        fi
-        '''
+            if (status != 0) {
+                echo "❌ Build Failed"
+                writeFile file: 'ai-projects/openai_self-healing-agent/build_failed', text: 'failed'
+            } else {
+                echo "✅ Build Passed"
+            }
+        }
     }
 }
         stage('AI Debug') {
@@ -51,12 +47,23 @@ pipeline {
     }
 }
 
-        stage('Rebuild') {
-            steps {
-                sh '''
+        stage('Rebuild After Fix') {
+    when {
+        expression {
+            return fileExists('ai-projects/openai_self-healing-agent/build_failed')
+        }
+    }
+    steps {
+        script {
+            def status = sh(script: '''
                 cd ai-projects/openai_self-healing-agent/ai-devops-maven
-                mvn clean install
-                '''
+                mvn clean install -U
+            ''', returnStatus: true)
+
+            if (status != 0) {
+                error("❌ Build still failing after AI fix")
+            } else {
+                echo "✅ Build Fixed Successfully"
             }
         }
     }

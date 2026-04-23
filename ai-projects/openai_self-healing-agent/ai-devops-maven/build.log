@@ -16,34 +16,30 @@
 [INFO] Recompiling the module because of changed source code.
 [WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
 [INFO] Compiling 1 source file with javac [debug target 1.8] to target/classes
-[INFO] -------------------------------------------------------------
-[WARNING] COMPILATION WARNING : 
-[INFO] -------------------------------------------------------------
 [WARNING] bootstrap class path not set in conjunction with -source 8
 [WARNING] source value 8 is obsolete and will be removed in a future release
 [WARNING] target value 8 is obsolete and will be removed in a future release
 [WARNING] To suppress warnings about obsolete options, use -Xlint:-options.
-[INFO] 4 warnings 
-[INFO] -------------------------------------------------------------
-[INFO] -------------------------------------------------------------
-[ERROR] COMPILATION ERROR : 
-[INFO] -------------------------------------------------------------
-[ERROR] /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/openai_self-healing-agent/ai-devops-maven/src/main/java/App.java:[3,39] ';' expected
-[INFO] 1 error
-[INFO] -------------------------------------------------------------
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ self-healing ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/openai_self-healing-agent/ai-devops-maven/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ self-healing ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ self-healing ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.5.0:jar (default-jar) @ self-healing ---
+[INFO] Building jar: /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/openai_self-healing-agent/ai-devops-maven/target/self-healing-1.0.jar
+[INFO] 
+[INFO] --- install:3.1.4:install (default-install) @ self-healing ---
+[INFO] Installing /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/openai_self-healing-agent/ai-devops-maven/pom.xml to /var/jenkins_home/.m2/repository/com/ai/self-healing/1.0/self-healing-1.0.pom
+[INFO] Installing /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/openai_self-healing-agent/ai-devops-maven/target/self-healing-1.0.jar to /var/jenkins_home/.m2/repository/com/ai/self-healing/1.0/self-healing-1.0.jar
 [INFO] ------------------------------------------------------------------------
-[INFO] BUILD FAILURE
+[INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  0.854 s
-[INFO] Finished at: 2026-04-23T19:47:13Z
+[INFO] Total time:  1.594 s
+[INFO] Finished at: 2026-04-23T19:47:36Z
 [INFO] ------------------------------------------------------------------------
-[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.15.0:compile (default-compile) on project self-healing: Compilation failure
-[ERROR] /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/openai_self-healing-agent/ai-devops-maven/src/main/java/App.java:[3,39] ';' expected
-[ERROR] 
-[ERROR] -> [Help 1]
-[ERROR] 
-[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
-[ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR] 
-[ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

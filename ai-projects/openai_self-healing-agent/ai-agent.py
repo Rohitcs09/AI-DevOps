@@ -1,117 +1,88 @@
 import os
-import re
+from openai import OpenAI
 
-# 📄 Correct log file path (from Jenkins root)
-# LOG_FILE = os.path.abspath(os.path.join(os.getcwd(), "../../build.log"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 LOG_FILE = "ai-devops-maven/build.log"
-JAVA_FILE = None
+JAVA_FILE = "ai-devops-maven/src/main/java/App.java"
+POM_FILE = "ai-devops-maven/pom.xml"
 
-# 🔍 Auto-detect Java file
-for root, dirs, files in os.walk("."):
-    for file in files:
-        if file.endswith(".java"):
-            JAVA_FILE = os.path.join(root, file)
+def read_file(path):
+    if os.path.exists(path):
+        with open(path, "r") as f:
+            return f.read()
+    return ""
 
+def write_file(path, content):
+    with open(path, "w") as f:
+        f.write(content)
 
-# -----------------------------
-# 🔧 FIX 1: Missing Semicolon
-# -----------------------------
-def fix_semicolon():
-    print("🔧 Fix: Checking missing semicolon...")
+def ask_ai(log, java_code, pom):
+    prompt = f"""
+You are a DevOps AI agent.
 
-    if not JAVA_FILE:
-        print("❌ Java file not found")
-        return False
+Build failed with this error:
+{log}
 
-    with open(JAVA_FILE, "r") as f:
-        lines = f.readlines()
+Java Code:
+{java_code}
 
-    fixed = False
-    new_lines = []
+POM File:
+{pom}
 
-    for line in lines:
-        if "System.out.println" in line and ";" not in line:
-            print("⚡ Fixing missing semicolon...")
-            line = line.rstrip() + ";\n"
-            fixed = True
+Fix all issues:
+- syntax errors
+- outdated dependencies
 
-        new_lines.append(line)
+Return ONLY updated Java code and pom.xml in this format:
 
-    if fixed:
-        with open(JAVA_FILE, "w") as f:
-            f.writelines(new_lines)
-        print("✅ Semicolon fixed")
+---JAVA---
+<fixed java code>
+
+---POM---
+<fixed pom.xml>
+"""
+
+    response = client.chat.completions.create(
+        model="gpt-4.1-mini",
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    return response.choices[0].message.content
+
+def apply_fix(ai_output):
+    if "---JAVA---" in ai_output and "---POM---" in ai_output:
+        java_part = ai_output.split("---JAVA---")[1].split("---POM---")[0]
+        pom_part = ai_output.split("---POM---")[1]
+
+        write_file(JAVA_FILE, java_part.strip())
+        write_file(POM_FILE, pom_part.strip())
+
+        print("✅ AI Fix Applied")
         return True
 
-    print("ℹ️ No syntax issue found")
+    print("⚠️ AI response invalid")
     return False
 
 
-# -----------------------------
-# 🔧 FIX 2: Upgrade JUnit
-# -----------------------------
-def fix_junit():
-    print("🔧 Fix: Checking JUnit version...")
+def main():
+    print("🤖 AI Agent Started...")
 
-    pom_path = "ai-devops-maven/pom.xml"
+    log = read_file(LOG_FILE)
 
-    if not os.path.exists(pom_path):
-        print("❌ pom.xml not found")
-        return False
-
-    with open(pom_path, "r") as f:
-        pom = f.read()
-
-    if "<version>4.10</version>" in pom:
-        print("⚡ Upgrading JUnit version...")
-        pom = pom.replace("<version>4.10</version>", "<version>4.13.2</version>")
-
-        with open(pom_path, "w") as f:
-            f.write(pom)
-
-        print("✅ JUnit upgraded")
-        return True
-
-    print("ℹ️ JUnit already correct")
-    return False
-
-
-# -----------------------------
-# 🤖 MAIN AI LOGIC
-# -----------------------------
-def auto_fix():
-    print("🤖 AI Agent Started...\n")
-
-    print("📂 Current Dir:", os.getcwd())
-    print("📄 Looking for log at:", LOG_FILE)
-
-    if not os.path.exists(LOG_FILE):
-        print("❌ build.log not found")
+    if not log:
+        print("❌ build.log not found or empty")
         return
 
-    with open(LOG_FILE, "r") as f:
-        log = f.read()
+    java_code = read_file(JAVA_FILE)
+    pom = read_file(POM_FILE)
 
-    print("\n📄 Analyzing logs...\n")
-    print("🔍 Log Preview:\n", log[:500])
+    ai_output = ask_ai(log, java_code, pom)
 
-    fixed_any = False
+    print("\n🤖 AI Response:\n", ai_output)
 
-    # 🔥 Robust Syntax Detection
-    if re.search(r"; expected", log) or re.search(r"';' expected", log):
-        print("\n🚨 Syntax error detected!")
-        fixed_any = fix_semicolon()
-
-    # 🔥 JUnit Detection
-    if "junit" in log.lower():
-        fixed_any = fix_junit() or fixed_any
-
-    if fixed_any:
-        print("\n🚀 Fix applied successfully!")
-    else:
-        print("\n⚠️ No auto-fix applied")
+    apply_fix(ai_output)
 
 
-# -----------------------------
 if __name__ == "__main__":
-    auto_fix()
+    main()

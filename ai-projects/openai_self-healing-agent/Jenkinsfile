@@ -1,88 +1,146 @@
-import os
-from openai import OpenAI
+pipeline {
+    agent any
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    tools {
+        maven 'Maven3'
+    }
 
-LOG_FILE = "ai-devops-maven/build.log"
-JAVA_FILE = "ai-devops-maven/src/main/java/App.java"
-POM_FILE = "ai-devops-maven/pom.xml"
+    stages {
 
-def read_file(path):
-    if os.path.exists(path):
-        with open(path, "r") as f:
-            return f.read()
-    return ""
+        stage('Clone Code') {
+            steps {
+                git branch: 'main',
+                    credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',
+                    url: 'https://github.com/Rohitcs09/AI-DevOps.git'
+            }
+        }
 
-def write_file(path, content):
-    with open(path, "w") as f:
-        f.write(content)
+        stage('Skip AI Loop') {
+            steps {
+                script {
+                    def msg = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+                    echo "Last commit message: ${msg}"
 
-def ask_ai(log, java_code, pom):
-    prompt = f"""
-You are a DevOps AI agent.
+                    if (msg.contains("[ai]")) {
+                        echo "AI commit detected → stopping loop"
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    }
+                }
+            }
+        }
 
-Build failed with this error:
-{log}
+        // -------------------------------
+        // 🚀 BUILD STAGE (LOG FIXED)
+        // -------------------------------
+        stage('Build with Maven') {
+            steps {
+                script {
+                    def status = sh(script: '''
+                        cd ai-projects/openai_self-healing-agent/ai-devops-maven
 
-Java Code:
-{java_code}
+                        echo "🚀 Running Maven Build..."
+                        mvn clean install -U > build.log 2>&1 
+                    ''', returnStatus: true)
 
-POM File:
-{pom}
+                    def log = readFile 'ai-projects/openai_self-healing-agent/ai-devops-maven/build.log'
 
-Fix all issues:
-- syntax errors
-- outdated dependencies
+                    echo "===== BUILD LOG START ====="
+                    echo log
+                    echo "===== BUILD LOG END ====="
 
-Return ONLY updated Java code and pom.xml in this format:
+                    if (status != 0) {
+                        echo "❌ Build Failed"
+                        writeFile file: 'ai-projects/openai_self-healing-agent/build_failed', text: 'failed'
+                    } else {
+                        echo "✅ Build Passed"
+                    }
+                }
+            }
+        }
 
----JAVA---
-<fixed java code>
+        // -------------------------------
+        // 🤖 AI FIX STAGE
+        // -------------------------------
+        stage('AI Fix') {
+            when {
+                expression {
+                    return fileExists('ai-projects/openai_self-healing-agent/build_failed')
+                }
+            }
+            steps {
+                script {
+                    echo "🤖 Running AI Fix..."
 
----POM---
-<fixed pom.xml>
-"""
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: '77574aa6-ebb8-4641-9540-da90dbcb1576',
+                            usernameVariable: 'GIT_USER',
+                            passwordVariable: 'GIT_PASS'
+                        ),
+                        string(credentialsId: 'OPENAI_API_KEY', variable: 'OPENAI_API_KEY')
+                    ]) {
 
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[{"role": "user", "content": prompt}]
-    )
+                        sh '''
+                        cd ai-projects/openai_self-healing-agent
 
-    return response.choices[0].message.content
+                        echo "📂 Current Path:"
+                        pwd
 
-def apply_fix(ai_output):
-    if "---JAVA---" in ai_output and "---POM---" in ai_output:
-        java_part = ai_output.split("---JAVA---")[1].split("---POM---")[0]
-        pom_part = ai_output.split("---POM---")[1]
+                        echo "📂 Project Structure:"
+                        ls -R
 
-        write_file(JAVA_FILE, java_part.strip())
-        write_file(POM_FILE, pom_part.strip())
+                        echo "📦 Installing Python dependencies..."
+                        python3 -m pip install --break-system-packages openai python-dotenv
 
-        print("✅ AI Fix Applied")
-        return True
+                        export OPENAI_API_KEY=$OPENAI_API_KEY
 
-    print("⚠️ AI response invalid")
-    return False
+                        echo "🤖 Running AI Agent..."
+                        python3 ai-agent.py
 
+                        git config user.email "jenkins@ai.com"
+                        git config user.name "Jenkins AI Bot"
 
-def main():
-    print("🤖 AI Agent Started...")
+                        git add .
 
-    log = read_file(LOG_FILE)
+                        if git diff --cached --quiet; then
+                          echo "No changes"
+                        else
+                          git commit -m "[ai] auto-fix code + dependency issue"
+                          git remote set-url origin https://$GIT_USER:$GIT_PASS@github.com/Rohitcs09/AI-DevOps.git
+                          git push origin main
+                        fi
+                        '''
+                    }
+                }
+            }
+        }
 
-    if not log:
-        print("❌ build.log not found or empty")
-        return
+        // -------------------------------
+        // 🔁 REBUILD AFTER FIX
+        // -------------------------------
+        stage('Rebuild After Fix') {
+            when {
+                expression {
+                    return fileExists('ai-projects/openai_self-healing-agent/build_failed')
+                }
+            }
+            steps {
+                script {
+                    def status = sh(script: '''
+                        cd ai-projects/openai_self-healing-agent/ai-devops-maven
 
-    java_code = read_file(JAVA_FILE)
-    pom = read_file(POM_FILE)
+                        echo "🔁 Rebuilding after AI fix..."
+                        mvn clean install -U
+                    ''', returnStatus: true)
 
-    ai_output = ask_ai(log, java_code, pom)
-
-    print("\n🤖 AI Response:\n", ai_output)
-
-    apply_fix(ai_output)
-
-
-if __name__ == "__main__":
-    main()
+                    if (status != 0) {
+                        error("❌ Build still failing after AI fix")
+                    } else {
+                        echo "✅ Build Fixed Successfully"
+                    }
+                }
+            }
+        }
+    }
+}

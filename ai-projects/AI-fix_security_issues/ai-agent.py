@@ -6,7 +6,7 @@ from openai import OpenAI
 # -------------------------------
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-POM_FILE = "pom.xml"
+POM_FILE = "ai-devops-maven/pom.xml"
 
 
 # -------------------------------

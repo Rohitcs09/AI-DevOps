@@ -37,13 +37,13 @@ pipeline {
             steps {
                 script {
                     def status = sh(script: '''
-                        cd ai-projects/openai_self-healing-agent/ai-devops-maven
+                        cd ai-projects/AI-fix_security_issues/ai-devops-maven
 
                         echo "🚀 Running Maven Build..."
                         mvn clean install -U > build.log 2>&1 
                     ''', returnStatus: true)
 
-                    def log = readFile 'ai-projects/openai_self-healing-agent/ai-devops-maven/build.log'
+                    def log = readFile 'ai-projects/AI-fix_security_issues/ai-devops-maven/build.log'
 
                     echo "===== BUILD LOG START ====="
                     echo log
@@ -51,7 +51,7 @@ pipeline {
 
                     if (status != 0) {
                         echo "❌ Build Failed"
-                        writeFile file: 'ai-projects/openai_self-healing-agent/build_failed', text: 'failed'
+                        writeFile file: 'ai-projects/AI-fix_security_issues/build_failed', text: 'failed'
                     } else {
                         echo "✅ Build Passed"
                     }
@@ -65,7 +65,7 @@ pipeline {
         stage('AI Fix') {
             when {
                 expression {
-                    return fileExists('ai-projects/openai_self-healing-agent/build_failed')
+                    return fileExists('ai-projects/AI-fix_security_issues/build_failed')
                 }
             }
             steps {
@@ -82,7 +82,7 @@ pipeline {
                     ]) {
 
                         sh '''
-                        cd ai-projects/openai_self-healing-agent
+                        cd ai-projects/AI-fix_security_issues
 
                         echo "📂 Current Path:"
                         pwd
@@ -122,13 +122,13 @@ pipeline {
         stage('Rebuild After Fix') {
             when {
                 expression {
-                    return fileExists('ai-projects/openai_self-healing-agent/build_failed')
+                    return fileExists('ai-projects/AI-fix_security_issues/build_failed')
                 }
             }
             steps {
                 script {
                     def status = sh(script: '''
-                        cd ai-projects/openai_self-healing-agent/ai-devops-maven
+                        cd ai-projects/AI-fix_security_issues/ai-devops-maven
 
                         echo "🔁 Rebuilding after AI fix..."
                         mvn clean install -U

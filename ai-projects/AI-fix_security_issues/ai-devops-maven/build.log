@@ -1,0 +1,38 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< com.ai:self-healing >-------------------------
+[INFO] Building self-healing 1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ self-healing ---
+[INFO] Deleting /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/openai_self-healing-agent/ai-devops-maven/target
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ self-healing ---
+[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/openai_self-healing-agent/ai-devops-maven/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ self-healing ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 1 source file with javac [debug release 17] to target/classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/openai_self-healing-agent/ai-devops-maven/src/main/java/App.java:[3,39] ';' expected
+[INFO] 1 error
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.934 s
+[INFO] Finished at: 2026-04-24T12:17:18Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project self-healing: Compilation failure
+[ERROR] /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/openai_self-healing-agent/ai-devops-maven/src/main/java/App.java:[3,39] ';' expected
+[ERROR] 
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

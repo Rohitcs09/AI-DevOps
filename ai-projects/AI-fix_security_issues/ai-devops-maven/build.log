@@ -6,17 +6,17 @@
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO] 
 [INFO] --- clean:3.2.0:clean (default-clean) @ self-healing ---
-[INFO] Deleting /var/jenkins_home/workspace/AI-DevOps-Pipeline@2/ai-projects/AI-fix_security_issues/ai-devops-maven/target
+[INFO] Deleting /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/AI-fix_security_issues/ai-devops-maven/target
 [INFO] 
 [INFO] --- resources:3.4.0:resources (default-resources) @ self-healing ---
-[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/AI-DevOps-Pipeline@2/ai-projects/AI-fix_security_issues/ai-devops-maven/src/main/resources
+[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/AI-fix_security_issues/ai-devops-maven/src/main/resources
 [INFO] 
 [INFO] --- compiler:3.11.0:compile (default-compile) @ self-healing ---
 [INFO] Changes detected - recompiling the module! :source
 [INFO] Compiling 1 source file with javac [debug release 17] to target/classes
 [INFO] 
 [INFO] --- resources:3.4.0:testResources (default-testResources) @ self-healing ---
-[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/AI-DevOps-Pipeline@2/ai-projects/AI-fix_security_issues/ai-devops-maven/src/test/resources
+[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/AI-fix_security_issues/ai-devops-maven/src/test/resources
 [INFO] 
 [INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ self-healing ---
 [INFO] No sources to compile
@@ -25,14 +25,14 @@
 [INFO] No tests to run.
 [INFO] 
 [INFO] --- jar:3.5.0:jar (default-jar) @ self-healing ---
-[INFO] Building jar: /var/jenkins_home/workspace/AI-DevOps-Pipeline@2/ai-projects/AI-fix_security_issues/ai-devops-maven/target/self-healing-1.0.jar
+[INFO] Building jar: /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/AI-fix_security_issues/ai-devops-maven/target/self-healing-1.0.jar
 [INFO] 
 [INFO] --- install:3.1.4:install (default-install) @ self-healing ---
-[INFO] Installing /var/jenkins_home/workspace/AI-DevOps-Pipeline@2/ai-projects/AI-fix_security_issues/ai-devops-maven/pom.xml to /var/jenkins_home/.m2/repository/com/ai/self-healing/1.0/self-healing-1.0.pom
-[INFO] Installing /var/jenkins_home/workspace/AI-DevOps-Pipeline@2/ai-projects/AI-fix_security_issues/ai-devops-maven/target/self-healing-1.0.jar to /var/jenkins_home/.m2/repository/com/ai/self-healing/1.0/self-healing-1.0.jar
+[INFO] Installing /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/AI-fix_security_issues/ai-devops-maven/pom.xml to /var/jenkins_home/.m2/repository/com/ai/self-healing/1.0/self-healing-1.0.pom
+[INFO] Installing /var/jenkins_home/workspace/AI-DevOps-Pipeline/ai-projects/AI-fix_security_issues/ai-devops-maven/target/self-healing-1.0.jar to /var/jenkins_home/.m2/repository/com/ai/self-healing/1.0/self-healing-1.0.jar
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  2.576 s
-[INFO] Finished at: 2026-04-27T09:56:28Z
+[INFO] Total time:  1.666 s
+[INFO] Finished at: 2026-04-27T10:04:02Z
 [INFO] ------------------------------------------------------------------------

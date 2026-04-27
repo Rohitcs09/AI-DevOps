@@ -1,88 +1,119 @@
 import os
 from openai import OpenAI
 
+# -------------------------------
+# 🔑 INIT OPENAI
+# -------------------------------
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-LOG_FILE = "ai-devops-maven/build.log"
-JAVA_FILE = "ai-devops-maven/src/main/java/App.java"
-POM_FILE = "ai-devops-maven/pom.xml"
+POM_FILE = "pom.xml"
 
-def read_file(path):
-    if os.path.exists(path):
-        with open(path, "r") as f:
-            return f.read()
-    return ""
 
-def write_file(path, content):
-    with open(path, "w") as f:
-        f.write(content)
+# -------------------------------
+# 📄 READ POM
+# -------------------------------
+def read_pom():
+    if not os.path.exists(POM_FILE):
+        print("❌ pom.xml not found!")
+        return None
 
-def ask_ai(log, java_code, pom):
+    with open(POM_FILE, "r") as f:
+        return f.read()
+
+
+# -------------------------------
+# 🤖 AI ANALYSIS
+# -------------------------------
+def analyze_with_ai(pom_content):
+    print("\n🤖 Sending pom.xml to OpenAI for security analysis...\n")
+
     prompt = f"""
-You are a DevOps AI agent.
+You are a DevSecOps AI Agent.
 
-Build failed with this error:
-{log}
+Analyze the given Maven pom.xml file and identify vulnerable dependencies.
 
-Java Code:
-{java_code}
+Tasks:
+1. Detect vulnerable dependencies
+2. Mention reason (CVE or risk)
+3. Suggest secure/latest version
+4. Return updated pom.xml
 
-POM File:
-{pom}
+Output format strictly:
 
-Fix all issues:
-- syntax errors
-- outdated dependencies
+---ISSUES---
+<list vulnerabilities>
 
-Return ONLY updated Java code and pom.xml in this format:
+---FIXED_POM---
+<updated pom.xml>
 
----JAVA---
-<fixed java code>
-
----POM---
-<fixed pom.xml>
+pom.xml:
+{pom_content}
 """
 
     response = client.chat.completions.create(
         model="gpt-4.1-mini",
-        messages=[{"role": "user", "content": prompt}]
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0
     )
 
     return response.choices[0].message.content
 
-def apply_fix(ai_output):
-    if "---JAVA---" in ai_output and "---POM---" in ai_output:
-        java_part = ai_output.split("---JAVA---")[1].split("---POM---")[0]
-        pom_part = ai_output.split("---POM---")[1]
 
-        write_file(JAVA_FILE, java_part.strip())
-        write_file(POM_FILE, pom_part.strip())
+# -------------------------------
+# 🔍 DISPLAY ISSUES
+# -------------------------------
+def show_issues(output):
+    if "---ISSUES---" in output:
+        issues = output.split("---ISSUES---")[1].split("---FIXED_POM---")[0]
 
-        print("✅ AI Fix Applied")
-        return True
-
-    print("⚠️ AI response invalid")
-    return False
+        print("🚨 SECURITY ALERT 🚨")
+        print("We found vulnerabilities in pom.xml:\n")
+        print(issues.strip())
 
 
+# -------------------------------
+# 🔧 APPLY FIX
+# -------------------------------
+def apply_fix(output):
+    if "---FIXED_POM---" not in output:
+        print("⚠️ No fix provided by AI")
+        return False
+
+    fixed_pom = output.split("---FIXED_POM---")[1].strip()
+
+    with open(POM_FILE, "w") as f:
+        f.write(fixed_pom)
+
+    print("\n🤖 AI is fixing vulnerabilities...\n")
+    print("✅ Vulnerabilities fixed by OpenAI Agent\n")
+
+    return True
+
+
+# -------------------------------
+# 🚀 MAIN FLOW
+# -------------------------------
 def main():
-    print("🤖 AI Agent Started...")
+    print("🤖 AI DevSecOps Agent Started...\n")
 
-    log = read_file(LOG_FILE)
-
-    if not log:
-        print("❌ build.log not found or empty")
+    pom_content = read_pom()
+    if not pom_content:
         return
 
-    java_code = read_file(JAVA_FILE)
-    pom = read_file(POM_FILE)
+    output = analyze_with_ai(pom_content)
 
-    ai_output = ask_ai(log, java_code, pom)
+    show_issues(output)
 
-    print("\n🤖 AI Response:\n", ai_output)
+    changed = apply_fix(output)
 
-    apply_fix(ai_output)
+    if changed:
+        print("🔁 Changes applied successfully. Ready for rebuild!")
+    else:
+        print("⚠️ No changes applied.")
 
 
+# -------------------------------
+# 🚀 ENTRY POINT
+# -------------------------------
 if __name__ == "__main__":
     main()

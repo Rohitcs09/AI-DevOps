@@ -30,44 +30,39 @@ pipeline {
             }
         }
 
-        // -------------------------------
-        // 🚀 BUILD + OWASP SCAN
-        // -------------------------------
-        stage('Build + OWASP Scan') {
-            steps {
-                script {
-                    def status = sh(script: '''
-                        cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
+stage('Build + OWASP Scan') {
+    steps {
+        script {
+            def status = sh(script: '''
+                cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
 
-                        echo "🚀 Running Maven Build + OWASP Scan..."
-                        mvn clean install -DskipTests -U > build.log 2>&1
-                    ''', returnStatus: true)
+                echo "🚀 Running Maven Build..."
+                mvn clean install -DskipTests -U > build.log 2>&1
 
-		    	echo "🔍 Running OWASP Scan..."
-		        mvn org.owasp:dependency-check-maven:check
+                echo "🔍 Running OWASP Scan..."
+                mvn org.owasp:dependency-check-maven:check
 
-			echo "📂 Checking target folder..."
-			ls target/
+                echo "📂 Checking target folder..."
+                ls target/
+            ''', returnStatus: true)
 
-                    def log = readFile 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/build.log'
+            def log = readFile 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/build.log'
 
-                    echo "===== BUILD LOG START ====="
-                    echo log
-                    echo "===== BUILD LOG END ====="
+            echo "===== BUILD LOG START ====="
+            echo log
+            echo "===== BUILD LOG END ====="
 
-                    // OWASP report check
-                    def reportExists = fileExists('ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/target/dependency-check-report.json')
+            def reportExists = fileExists('ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/target/dependency-check-report.json')
 
-                    if (status != 0 || reportExists) {
-                        echo "❌ Build Failed or Vulnerabilities Found"
-                        writeFile file: 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/build_failed', text: 'failed'
-                    } else {
-                        echo "✅ Build Passed (No vulnerabilities)"
-                    }
-                }
+            if (status != 0 || reportExists) {
+                echo "❌ Build Failed or Vulnerabilities Found"
+                writeFile file: 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/build_failed', text: 'failed'
+            } else {
+                echo "✅ Build Passed (No vulnerabilities)"
             }
         }
-
+    }
+}
         // -------------------------------
         // 🤖 AI SECURITY FIX
         // -------------------------------

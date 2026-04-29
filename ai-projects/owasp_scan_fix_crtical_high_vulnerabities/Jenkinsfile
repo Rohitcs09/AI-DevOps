@@ -30,40 +30,44 @@ pipeline {
             }
         }
 
-stage('Build + OWASP Scan') {
+        stage('Build + OWASP Scan') {
     steps {
         script {
-            def status = sh(script: '''
-                cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
 
-                echo "🚀 Running Maven Build..."
-                mvn clean install -DskipTests -U > build.log 2>&1
+            // 1. Build
+            sh '''
+            cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
+            echo "🚀 Running Maven Build..."
+            mvn clean install -DskipTests -U
+            '''
 
-                echo "🔍 Running OWASP Scan..."
-                mvn org.owasp:dependency-check-maven:check
+            // 2. OWASP Scan (separate)
+            sh '''
+            cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
+            echo "🔍 Running OWASP Scan..."
+            mvn org.owasp:dependency-check-maven:check -Dformat=JSON
+            '''
 
-                echo "📂 Checking target folder..."
-                ls target/
-            ''', returnStatus: true)
-
-            def log = readFile 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/build.log'
-
-            echo "===== BUILD LOG START ====="
-            echo log
-            echo "===== BUILD LOG END ====="
+            // 3. Debug
+            sh '''
+            cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
+            echo "📂 Target folder content:"
+            ls -l target/
+            '''
 
             def reportExists = fileExists('ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/target/dependency-check-report.json')
 
-            if (status != 0 || reportExists) {
-                echo "❌ Build Failed or Vulnerabilities Found"
-                writeFile file: 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/build_failed', text: 'failed'
+            if (!reportExists) {
+                error("❌ OWASP report STILL not generated")
             } else {
-                echo "✅ Build Passed (No vulnerabilities)"
+                echo "✅ OWASP report generated"
+                writeFile file: 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/build_failed', text: 'vulnerabilities_found'
             }
         }
     }
 }
-        // -------------------------------
+
+	// -------------------------------
         // 🤖 AI SECURITY FIX
         // -------------------------------
         stage('AI Security Fix') {

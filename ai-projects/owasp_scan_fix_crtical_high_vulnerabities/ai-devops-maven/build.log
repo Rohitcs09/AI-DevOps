@@ -4,18 +4,6 @@
 [INFO] Building self-healing 1.0
 [INFO]   from pom.xml
 [INFO] --------------------------------[ jar ]---------------------------------
-Downloading from central: https://repo.maven.apache.org/maven2/org/owasp/dependency-check-maven/9.0.9/dependency-check-maven-9.0.9.pom
-Progress (1): 741 BProgress (1): 1.7 kBProgress (1): 4.5 kBProgress (1): 8.4 kBProgress (1): 8.7 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/owasp/dependency-check-maven/9.0.9/dependency-check-maven-9.0.9.pom (8.7 kB at 16 kB/s)
-Downloading from central: https://repo.maven.apache.org/maven2/org/owasp/dependency-check-parent/9.0.9/dependency-check-parent-9.0.9.pom
-Progress (1): 676 BProgress (1): 1.6 kBProgress (1): 4.5 kBProgress (1): 6.6 kBProgress (1): 7.9 kBProgress (1): 9.8 kBProgress (1): 18 kB Progress (1): 21 kBProgress (1): 25 kBProgress (1): 31 kBProgress (1): 34 kBProgress (1): 38 kBProgress (1): 42 kBProgress (1): 46 kBProgress (1): 51 kBProgress (1): 58 kBProgress (1): 61 kBProgress (1): 64 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/org/owasp/dependency-check-parent/9.0.9/dependency-check-parent-9.0.9.pom (64 kB at 1.6 MB/s)
-Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/jackson-bom/2.16.0/jackson-bom-2.16.0.pom
-Progress (1): 924 BProgress (1): 2.0 kBProgress (1): 6.3 kBProgress (1): 15 kB Progress (1): 18 kBProgress (1): 18 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/jackson-bom/2.16.0/jackson-bom-2.16.0.pom (18 kB at 651 kB/s)
-Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/jackson-parent/2.16/jackson-parent-2.16.pom
-Progress (1): 1.1 kBProgress (1): 2.2 kBProgress (1): 3.6 kBProgress (1): 5.6 kBProgress (1): 6.5 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/jackson-parent/2.16/jackson-parent-2.16.pom (6.5 kB at 251 kB/s)
-Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/oss-parent/56/oss-parent-56.pom
-Progress (1): 1.0 kBProgress (1): 2.4 kBProgress (1): 3.4 kBProgress (1): 5.3 kBProgress (1): 8.5 kBProgress (1): 11 kB Progress (1): 13 kBProgress (1): 15 kBProgress (1): 18 kBProgress (1): 22 kBProgress (1): 24 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/com/fasterxml/oss-parent/56/oss-parent-56.pom (24 kB at 841 kB/s)
-Downloading from central: https://repo.maven.apache.org/maven2/org/owasp/dependency-check-maven/9.0.9/dependency-check-maven-9.0.9.jar
-Progress (1): 0.9/115 kBProgress (1): 2.3/115 kBProgress (1): 3.6/115 kBProgress (1): 5.0/115 kBProgress (1): 6.4/115 kBProgress (1): 7.7/115 kBProgress (1): 9.1/115 kBProgress (1): 10/115 kB Progress (1): 12/115 kBProgress (1): 13/115 kBProgress (1): 15/115 kBProgress (1): 16/115 kBProgress (1): 17/115 kBProgress (1): 19/115 kBProgress (1): 20/115 kBProgress (1): 21/115 kBProgress (1): 23/115 kBProgress (1): 24/115 kBProgress (1): 25/115 kBProgress (1): 29/115 kBProgress (1): 33/115 kBProgress (1): 37/115 kBProgress (1): 41/115 kBProgress (1): 46/115 kBProgress (1): 50/115 kBProgress (1): 54/115 kBProgress (1): 58/115 kBProgress (1): 63/115 kBProgress (1): 67/115 kBProgress (1): 71/115 kBProgress (1): 75/115 kBProgress (1): 80/115 kBProgress (1): 84/115 kBProgress (1): 88/115 kBProgress (1): 92/115 kBProgress (1): 96/115 kBProgress (1): 101/115 kBProgress (1): 105/115 kBProgress (1): 109/115 kBProgress (1): 113/115 kBProgress (1): 115 kB                        Downloaded from central: https://repo.maven.apache.org/maven2/org/owasp/dependency-check-maven/9.0.9/dependency-check-maven-9.0.9.jar (115 kB at 2.1 MB/s)
 Downloading from central: https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-api/1.1.0/junit-jupiter-api-1.1.0.pom
 [WARNING] The POM for org.junit.jupiter:junit-jupiter-api:jar:1.1.0 is missing, no dependency information available
 Downloading from central: https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-engine/1.1.0/junit-jupiter-engine-1.1.0.pom
@@ -34,8 +22,8 @@ Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jac
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  4.321 s
-[INFO] Finished at: 2026-04-29T13:14:49Z
+[INFO] Total time:  1.493 s
+[INFO] Finished at: 2026-04-29T13:15:11Z
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal on project self-healing: Could not resolve dependencies for project com.ai:self-healing:jar:1.0
 [ERROR] dependency: org.junit.jupiter:junit-jupiter-api:jar:1.1.0 (test)

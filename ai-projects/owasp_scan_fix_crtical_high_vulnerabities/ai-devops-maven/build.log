@@ -22,8 +22,8 @@ Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jac
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.022 s
-[INFO] Finished at: 2026-04-29T13:32:54Z
+[INFO] Total time:  1.040 s
+[INFO] Finished at: 2026-04-29T13:33:15Z
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal on project self-healing: Could not resolve dependencies for project com.ai:self-healing:jar:1.0
 [ERROR] dependency: org.junit.jupiter:junit-jupiter-api:jar:1.1.0 (test)

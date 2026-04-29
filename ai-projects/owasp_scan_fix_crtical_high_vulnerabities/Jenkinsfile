@@ -43,6 +43,12 @@ pipeline {
                         mvn clean install -DskipTests -U > build.log 2>&1
                     ''', returnStatus: true)
 
+		    	echo "🔍 Running OWASP Scan..."
+		        mvn org.owasp:dependency-check-maven:check
+
+			echo "📂 Checking target folder..."
+			ls target/
+
                     def log = readFile 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/build.log'
 
                     echo "===== BUILD LOG START ====="

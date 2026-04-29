@@ -16,14 +16,14 @@ Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jac
 [WARNING] The POM for com.fasterxml.jackson.core:jackson-databind:jar:1.1.0 is missing, no dependency information available
 Downloading from central: https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-api/1.1.0/junit-jupiter-api-1.1.0.jar
 Downloading from central: https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-engine/1.1.0/junit-jupiter-engine-1.1.0.jar
-Downloading from central: https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/1.1.17/log4j-api-1.1.17.jar
 Downloading from central: https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/1.1.17/log4j-core-1.1.17.jar
 Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/1.1.0/jackson-databind-1.1.0.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/1.1.17/log4j-api-1.1.17.jar
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.346 s
-[INFO] Finished at: 2026-04-29T13:26:29Z
+[INFO] Total time:  1.803 s
+[INFO] Finished at: 2026-04-29T13:26:50Z
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal on project self-healing: Could not resolve dependencies for project com.ai:self-healing:jar:1.0
 [ERROR] dependency: org.junit.jupiter:junit-jupiter-api:jar:1.1.0 (test)

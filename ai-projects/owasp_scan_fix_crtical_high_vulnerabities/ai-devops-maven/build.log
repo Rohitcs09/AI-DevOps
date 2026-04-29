@@ -17,13 +17,13 @@ Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jac
 Downloading from central: https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-api/1.1.0/junit-jupiter-api-1.1.0.jar
 Downloading from central: https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-engine/1.1.0/junit-jupiter-engine-1.1.0.jar
 Downloading from central: https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/1.1.17/log4j-api-1.1.17.jar
-Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/1.1.0/jackson-databind-1.1.0.jar
 Downloading from central: https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/1.1.17/log4j-core-1.1.17.jar
+Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/1.1.0/jackson-databind-1.1.0.jar
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.120 s
-[INFO] Finished at: 2026-04-29T13:29:53Z
+[INFO] Total time:  1.634 s
+[INFO] Finished at: 2026-04-29T13:30:15Z
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal on project self-healing: Could not resolve dependencies for project com.ai:self-healing:jar:1.0
 [ERROR] dependency: org.junit.jupiter:junit-jupiter-api:jar:1.1.0 (test)

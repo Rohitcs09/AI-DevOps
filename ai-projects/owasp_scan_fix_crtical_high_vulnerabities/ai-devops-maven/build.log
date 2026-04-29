@@ -1,0 +1,36 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< com.ai:self-healing >-------------------------
+[INFO] Building self-healing 1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/1.1.0/log4j-api-1.1.0.pom
+[WARNING] The POM for org.apache.logging.log4j:log4j-api:jar:1.1.0 is missing, no dependency information available
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/1.1.0/log4j-core-1.1.0.pom
+[WARNING] The POM for org.apache.logging.log4j:log4j-core:jar:1.1.0 is missing, no dependency information available
+Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/1.1.0/jackson-databind-1.1.0.pom
+[WARNING] The POM for com.fasterxml.jackson.core:jackson-databind:jar:1.1.0 is missing, no dependency information available
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/1.1.0/log4j-api-1.1.0.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/1.1.0/log4j-core-1.1.0.jar
+Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/1.1.0/jackson-databind-1.1.0.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.537 s
+[INFO] Finished at: 2026-04-28T05:03:13Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project self-healing: Could not resolve dependencies for project com.ai:self-healing:jar:1.0
+[ERROR] dependency: org.apache.logging.log4j:log4j-api:jar:1.1.0 (compile)
+[ERROR] 	Could not find artifact org.apache.logging.log4j:log4j-api:jar:1.1.0 in central (https://repo.maven.apache.org/maven2)
+[ERROR] dependency: org.apache.logging.log4j:log4j-core:jar:1.1.0 (compile)
+[ERROR] 	Could not find artifact org.apache.logging.log4j:log4j-core:jar:1.1.0 in central (https://repo.maven.apache.org/maven2)
+[ERROR] dependency: com.fasterxml.jackson.core:jackson-databind:jar:1.1.0 (compile)
+[ERROR] 	Could not find artifact com.fasterxml.jackson.core:jackson-databind:jar:1.1.0 in central (https://repo.maven.apache.org/maven2)
+[ERROR] 
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException

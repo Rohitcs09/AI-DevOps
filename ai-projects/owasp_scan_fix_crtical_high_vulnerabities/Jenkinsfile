@@ -40,31 +40,39 @@ stage('Build + OWASP Scan') {
 
             withEnv(["PATH+MAVEN=${mvnHome}/bin"]) {
 
-                sh '''
-                set +e
+                withCredentials([string(credentialsId: 'NVD_API_KEY', variable: 'NVD_API_KEY')]) {
 
-                echo "Maven Version:"
-                mvn -version
+                    sh '''
+                    set +e
 
-                cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
+                    echo "📦 Maven Version:"
+                    mvn -version
 
-                echo "🚀 Build..."
-                mvn clean install -DskipTests -U || true
+                    cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
 
-                echo "🔍 OWASP Scan..."
-                mvn org.owasp:dependency-check-maven:9.0.9:check -Dformat=JSON || true
+                    echo "🚀 Build..."
+                    mvn clean install -DskipTests -U
 
-                echo "📂 Target:"
-                ls -l target/ || true
+                    echo "🔍 OWASP Scan with NVD API Key..."
+                    mvn org.owasp:dependency-check-maven:9.0.9:check \
+                        -Dnvd.api.key=$NVD_API_KEY \
+                        -Dformat=JSON
 
-                set -e
-                '''
+                    echo "📂 Target folder:"
+                    ls -l target/ || true
+
+                    set -e
+                    '''
+                }
             }
 
-            def reportExists = fileExists('ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/target/dependency-check-report.json')
+            // ✅ Check report
+            def reportExists = fileExists(
+                'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/target/dependency-check-report.json'
+            )
 
             if (!reportExists) {
-                echo "⚠️ OWASP report NOT generated"
+                echo "⚠️ OWASP report NOT generated (forcing AI run)"
 
                 writeFile file: 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/build_failed', text: 'no_report'
             } else {
@@ -75,7 +83,6 @@ stage('Build + OWASP Scan') {
         }
     }
 }
-
 
 	// -------------------------------
         // 🤖 AI SECURITY FIX

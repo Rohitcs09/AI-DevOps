@@ -36,34 +36,31 @@ stage('Build + OWASP Scan') {
     steps {
         script {
 
-            // 👉 Jenkins Maven Tool
             def mvnHome = tool 'Maven3'
 
-            sh """
-            set +e
+            withEnv(["PATH+MAVEN=${mvnHome}/bin"]) {
 
-            cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
+                sh '''
+                echo "Maven Version:"
+                mvn -version
 
-            echo "📦 Using Maven from: ${mvnHome}"
-            ${mvnHome}/bin/mvn -version
+                cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
 
-            echo "🚀 Running Maven Build..."
-            ${mvnHome}/bin/mvn clean install -DskipTests -U
+                echo "🚀 Build..."
+                mvn clean install -DskipTests -U
 
-            echo "🔍 Running OWASP Scan..."
-            ${mvnHome}/bin/mvn org.owasp:dependency-check-maven:9.0.9:check -Dformat=JSON
+                echo "🔍 OWASP Scan..."
+                mvn org.owasp:dependency-check-maven:9.0.9:check -Dformat=JSON
 
-            echo "📂 Checking target folder..."
-            ls -l target/
+                echo "📂 Target folder:"
+                ls -l target/
+                '''
+            }
 
-            set -e
-            """
-
-            // 👉 Check OWASP report
             def reportExists = fileExists('ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/target/dependency-check-report.json')
 
             if (!reportExists) {
-                echo "⚠️ OWASP report NOT generated (forcing AI run)"
+                echo "⚠️ OWASP report NOT generated"
 
                 writeFile file: 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/build_failed', text: 'no_report'
             } else {
@@ -74,8 +71,6 @@ stage('Build + OWASP Scan') {
         }
     }
 }
-
-
 
 	// -------------------------------
         // 🤖 AI SECURITY FIX

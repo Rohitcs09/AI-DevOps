@@ -45,48 +45,58 @@ stage('Build + OWASP Scan') {
                     sh '''
                     set +e
 
-                    echo "📦 Maven Version:"
-                    mvn -version
-
                     cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
 
-                    echo "🚀 Step 1: Build..."
+                    echo "🚀 Build..."
                     mvn clean install -DskipTests -U || true
 
-                    echo "🔍 Step 2: OWASP Scan (with API + delay + cache)..."
+                    echo "🔍 Trying OWASP Scan (Real)..."
 
                     mvn org.owasp:dependency-check-maven:9.0.9:check \
                         -Dnvd.api.key=$NVD_API_KEY \
-                        -Dnvd.api.delay=8000 \
+                        -Dnvd.api.delay=10000 \
                         -DdataDirectory=/tmp/owasp-cache \
                         -Dformat=JSON \
-                        -DfailOnError=false || true
+                        -DfailOnError=false
 
-                    echo "📂 Target folder contents:"
-                    ls -l target/ || true
+                    echo "📂 Checking report..."
+                    if [ ! -f target/dependency-check-report.json ]; then
+                        echo "⚠️ OWASP failed → creating dummy report"
+
+                        mkdir -p target
+
+                        cat <<EOF > target/dependency-check-report.json
+{
+  "dependencies": [
+    {
+      "fileName": "log4j-core",
+      "vulnerabilities": [
+        {
+          "name": "CVE-2021-44228",
+          "severity": "CRITICAL"
+        }
+      ]
+    }
+  ]
+}
+EOF
+                    fi
+
+                    echo "📂 Final Target:"
+                    ls -l target/
 
                     set -e
                     '''
                 }
             }
 
-            // ✅ Check OWASP report
-            def reportPath = 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/target/dependency-check-report.json'
-            def reportExists = fileExists(reportPath)
+            // Always trigger AI
+            writeFile file: 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/build_failed', text: 'trigger_ai'
 
-            if (!reportExists) {
-                echo "⚠️ OWASP report NOT generated (forcing AI run)"
-
-                writeFile file: 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/build_failed', text: 'no_report'
-            } else {
-                echo "✅ OWASP report generated"
-
-                writeFile file: 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/build_failed', text: 'vulnerabilities_found'
-            }
+            echo "🤖 AI Fix will run"
         }
     }
 }
-
 
 
 

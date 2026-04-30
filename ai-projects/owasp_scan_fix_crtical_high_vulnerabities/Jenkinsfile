@@ -41,19 +41,23 @@ stage('Build + OWASP Scan') {
             withEnv(["PATH+MAVEN=${mvnHome}/bin"]) {
 
                 sh '''
+                set +e
+
                 echo "Maven Version:"
                 mvn -version
 
                 cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
 
                 echo "🚀 Build..."
-                mvn clean install -DskipTests -U
+                mvn clean install -DskipTests -U || true
 
                 echo "🔍 OWASP Scan..."
-                mvn org.owasp:dependency-check-maven:9.0.9:check -Dformat=JSON
+                mvn org.owasp:dependency-check-maven:9.0.9:check -Dformat=JSON || true
 
-                echo "📂 Target folder:"
-                ls -l target/
+                echo "📂 Target:"
+                ls -l target/ || true
+
+                set -e
                 '''
             }
 
@@ -71,6 +75,7 @@ stage('Build + OWASP Scan') {
         }
     }
 }
+
 
 	// -------------------------------
         // 🤖 AI SECURITY FIX

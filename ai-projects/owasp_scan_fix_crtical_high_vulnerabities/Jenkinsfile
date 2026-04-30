@@ -30,60 +30,53 @@ pipeline {
             }
         }
 
+	
+
 stage('Build + OWASP Scan') {
     steps {
         script {
 
-            // -------------------------------
-            // 1. BUILD (FAIL ALLOWED)
-            // -------------------------------
-            sh '''
+            // 👉 Jenkins Maven Tool
+            def mvnHome = tool 'Maven3'
+
+            sh """
             set +e
 
             cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
+
+            echo "📦 Using Maven from: ${mvnHome}"
+            ${mvnHome}/bin/mvn -version
 
             echo "🚀 Running Maven Build..."
-            mvn clean install -DskipTests -U
-
-            set -e
-            '''
-
-            // -------------------------------
-            // 2. OWASP SCAN (FAIL SAFE)
-            // -------------------------------
-            sh '''
-            set +e
-
-            cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
+            ${mvnHome}/bin/mvn clean install -DskipTests -U
 
             echo "🔍 Running OWASP Scan..."
-            mvn org.owasp:dependency-check-maven:9.0.9:check -Dformat=JSON
+            ${mvnHome}/bin/mvn org.owasp:dependency-check-maven:9.0.9:check -Dformat=JSON
 
-            echo "📂 Target folder content:"
+            echo "📂 Checking target folder..."
             ls -l target/
 
             set -e
-            '''
+            """
 
-            // -------------------------------
-            // 3. REPORT CHECK (NO BREAK)
-            // -------------------------------
+            // 👉 Check OWASP report
             def reportExists = fileExists('ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/target/dependency-check-report.json')
 
             if (!reportExists) {
-                echo "⚠️ OWASP report NOT generated (continuing...)"
+                echo "⚠️ OWASP report NOT generated (forcing AI run)"
 
-                // 🔥 FORCE AI TRIGGER
                 writeFile file: 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/build_failed', text: 'no_report'
             } else {
                 echo "✅ OWASP report generated"
 
-                // 🔥 NORMAL FLOW
                 writeFile file: 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/build_failed', text: 'vulnerabilities_found'
             }
         }
     }
 }
+
+
+
 	// -------------------------------
         // 🤖 AI SECURITY FIX
         // -------------------------------

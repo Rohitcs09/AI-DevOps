@@ -50,15 +50,19 @@ stage('Build + OWASP Scan') {
 
                     cd ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven
 
-                    echo "🚀 Build..."
-                    mvn clean install -DskipTests -U
+                    echo "🚀 Step 1: Build..."
+                    mvn clean install -DskipTests -U || true
 
-                    echo "🔍 OWASP Scan with NVD API Key..."
+                    echo "🔍 Step 2: OWASP Scan (with API + delay + cache)..."
+
                     mvn org.owasp:dependency-check-maven:9.0.9:check \
                         -Dnvd.api.key=$NVD_API_KEY \
-                        -Dformat=JSON
+                        -Dnvd.api.delay=8000 \
+                        -DdataDirectory=/tmp/owasp-cache \
+                        -Dformat=JSON \
+                        -DfailOnError=false || true
 
-                    echo "📂 Target folder:"
+                    echo "📂 Target folder contents:"
                     ls -l target/ || true
 
                     set -e
@@ -66,10 +70,9 @@ stage('Build + OWASP Scan') {
                 }
             }
 
-            // ✅ Check report
-            def reportExists = fileExists(
-                'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/target/dependency-check-report.json'
-            )
+            // ✅ Check OWASP report
+            def reportPath = 'ai-projects/owasp_scan_fix_crtical_high_vulnerabities/ai-devops-maven/target/dependency-check-report.json'
+            def reportExists = fileExists(reportPath)
 
             if (!reportExists) {
                 echo "⚠️ OWASP report NOT generated (forcing AI run)"
@@ -83,7 +86,6 @@ stage('Build + OWASP Scan') {
         }
     }
 }
-
 
 
 
